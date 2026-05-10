@@ -3,9 +3,6 @@ import { Play, ClipboardList, Package, Clock, ShieldAlert, ArrowLeft, CheckCircl
 import { cn } from '../lib/utils';
 import { GoogleGenAI } from "@google/genai";
 
-// Initialize Gemini
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 // Mock data based on the provided document
 const releasedOrders = [
   {
@@ -113,7 +110,17 @@ export function ProductionExecution() {
     setVerificationError(null);
     setOcrResult(null);
 
+    const apiKey = process.env.GEMINI_API_KEY?.trim();
+    if (!apiKey) {
+      setVerificationError(
+        'Validação por IA indisponível: defina GEMINI_API_KEY no .env do frontend e reinicie o Vite. Use liberação manual se precisar seguir sem foto.'
+      );
+      setIsVerifying(false);
+      return;
+    }
+
     try {
+      const ai = new GoogleGenAI({ apiKey });
       const base64Data = base64Image.split(',')[1];
       const prompt = `Você é um inspetor de qualidade industrial. Analise esta imagem de um rótulo de produto.
       Extraia o 'Lote' e a 'Data de Validade'.

@@ -39,7 +39,7 @@ export function Header({ onMenuOpen }: HeaderProps) {
         
         <div className="flex items-center gap-3">
           <div className="text-right hidden sm:block">
-            <p className="text-sm font-bold text-gray-900 tracking-tight leading-none mb-1">Fécula Amafil</p>
+            <p className="text-sm font-bold text-gray-900 tracking-tight leading-none mb-1">Amafil</p>
             <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest leading-none">Cianorte - PR</p>
           </div>
           <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-xl lg:rounded-2xl bg-gray-100 flex items-center justify-center text-gray-500 border border-bento-border shadow-sm">

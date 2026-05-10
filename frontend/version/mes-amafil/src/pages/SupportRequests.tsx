@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ClipboardList, MessageSquare, Wrench, Package, Clock, ShieldAlert, Search, Filter, Plus, CheckCircle2, ChevronRight, Terminal, ArrowRight } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -386,10 +387,13 @@ export function SupportRequests() {
               </div>
             </div>
 
-            <button className="w-full p-4 text-[10px] font-black text-amafil-blue uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amafil-blue hover:text-white transition-all border-t border-gray-100 italic">
-              Acessar Hub de Mensagens
+            <Link
+              to="/mensagens"
+              className="w-full p-4 text-[10px] font-black text-amafil-blue uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amafil-blue hover:text-white transition-all border-t border-gray-100 italic"
+            >
+              Mensagens
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
