@@ -49,6 +49,8 @@ export function ProductionExecution() {
   const [selectedOP, setSelectedOP] = useState<typeof releasedOrders[0] | null>(null);
   const [view, setView] = useState<'LIST' | 'EXECUTION'>('LIST');
   const [activeShift, setActiveShift] = useState(1);
+  const [showQuickActions, setShowQuickActions] = useState(false);
+  const [activeSupportForm, setActiveSupportForm] = useState<null | 'MNT' | 'ALM' | 'PCP'>(null);
   
   // Records State
   const [records, setRecords] = useState<any[]>([]);
@@ -76,6 +78,7 @@ export function ProductionExecution() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [ocrResult, setOcrResult] = useState<{ lote: string, validade: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const closeSupportForm = () => setActiveSupportForm(null);
 
   const handleManualRelease = () => {
     if (!showManualConfirm) {
@@ -203,6 +206,51 @@ export function ProductionExecution() {
     alert("Registro de produção salvo com sucesso! Você pode iniciar um novo registro ou finalizar a OP.");
   };
 
+  const SupportFormModal = ({
+    type,
+    title,
+    children,
+  }: {
+    type: string;
+    title: string;
+    children: React.ReactNode;
+  }) => (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in duration-200">
+        <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+          <div>
+            <span className="text-[10px] font-black text-amafil-blue uppercase tracking-widest">{type}</span>
+            <h3 className="text-xl font-black text-gray-900 italic tracking-tighter">{title}</h3>
+          </div>
+          <button onClick={closeSupportForm} className="text-gray-400 hover:text-gray-600 font-black text-xl">
+            ×
+          </button>
+        </div>
+        <div className="p-8 space-y-4">
+          {children}
+          <div className="pt-4 flex gap-3">
+            <button
+              onClick={closeSupportForm}
+              className="flex-1 py-3 px-4 rounded-2xl bg-gray-50 text-gray-500 text-xs font-black uppercase tracking-widest hover:bg-gray-100 transition-all"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() => {
+                alert('Solicitação enviada com sucesso!');
+                closeSupportForm();
+                setShowQuickActions(false);
+              }}
+              className="flex-1 py-3 px-4 rounded-2xl bg-amafil-blue text-white text-xs font-black uppercase tracking-widest shadow-md hover:bg-amafil-blue/90 transition-all"
+            >
+              Enviar Solicitação
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   if (view === 'LIST') {
     return (
       <div className="space-y-6">
@@ -262,6 +310,89 @@ export function ProductionExecution() {
 
   return (
     <div className="space-y-6">
+      {activeSupportForm === 'MNT' && (
+        <SupportFormModal type="Solicitação MNT" title="Chamar Manutenção">
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-gray-400 uppercase">Máquina / Equipamento</label>
+              <input
+                type="text"
+                defaultValue={selectedOP?.maquina ? `Linha ${selectedOP.maquina}` : ''}
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs font-bold"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-gray-400 uppercase">Descrição do Defeito</label>
+              <textarea
+                placeholder="Relate o problema observado..."
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs font-bold h-24 resize-none"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-gray-400 uppercase">Prioridade</label>
+              <select className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs font-bold">
+                <option>Média (Padrão)</option>
+                <option>Alta (Parada de Máquina)</option>
+                <option>Urgente (Risco de Segurança)</option>
+              </select>
+            </div>
+          </div>
+        </SupportFormModal>
+      )}
+
+      {activeSupportForm === 'ALM' && (
+        <SupportFormModal type="Solicitação ALM" title="Pedido Almoxarifado">
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-gray-400 uppercase">Item Solicitado</label>
+              <input
+                type="text"
+                placeholder="Fita, Filme, EPI..."
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs font-bold"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-gray-400 uppercase">Quantidade / Medida</label>
+              <input
+                type="text"
+                placeholder="Ex: 2 unidades"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs font-bold"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-gray-400 uppercase">Motivo</label>
+              <input
+                type="text"
+                placeholder="Reposição de estoque"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs font-bold"
+              />
+            </div>
+          </div>
+        </SupportFormModal>
+      )}
+
+      {activeSupportForm === 'PCP' && (
+        <SupportFormModal type="Suporte PCP" title="Dúvida PCP / Apontamento">
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-gray-400 uppercase">Número da OP</label>
+              <input
+                type="text"
+                defaultValue={selectedOP?.id || ''}
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs font-bold"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-black text-gray-400 uppercase">Descreva sua Dúvida</label>
+              <textarea
+                placeholder="Dúvida sobre quantidade, refugo, lote..."
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs font-bold h-24 resize-none"
+              />
+            </div>
+          </div>
+        </SupportFormModal>
+      )}
+
       {/* Header with Back Button */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-4 lg:p-6 rounded-3xl border border-bento-border shadow-sm gap-4">
         <div className="flex items-center gap-3 lg:gap-4">
@@ -775,10 +906,13 @@ export function ProductionExecution() {
                </div>
              </div>
 
-             <div className="grid grid-cols-2 gap-3">
-               <button className="h-12 bg-white border-2 border-bento-border text-gray-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-50 transition-all">
-                 Solicitar Reforço
-               </button>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => setShowQuickActions((prev) => !prev)}
+                className="h-12 bg-white border-2 border-bento-border text-gray-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-50 transition-all"
+              >
+                Solicitar Ajuda
+              </button>
                <button className={cn(
                  "h-12 bg-white border-2 border-bento-border rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all",
                  isVerified ? "text-amafil-red hover:bg-red-50" : "text-gray-300 pointer-events-none"
@@ -786,6 +920,39 @@ export function ProductionExecution() {
                  Finalizar OP
                </button>
              </div>
+
+            {showQuickActions && (
+              <div className="pt-2 border-t border-bento-border space-y-3 animate-in fade-in duration-200">
+                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Ações Rápidas</h4>
+                <button
+                  onClick={() => setActiveSupportForm('MNT')}
+                  className="w-full h-12 bg-white hover:bg-gray-50 text-gray-700 rounded-2xl flex items-center gap-3 px-4 transition-all text-xs font-bold border border-bento-border shadow-sm group"
+                >
+                  <div className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center text-status-danger">
+                    <AlertTriangle className="w-4 h-4" />
+                  </div>
+                  Chamar Manutenção (MNT)
+                </button>
+                <button
+                  onClick={() => setActiveSupportForm('ALM')}
+                  className="w-full h-12 bg-white hover:bg-gray-50 text-gray-700 rounded-2xl flex items-center gap-3 px-4 transition-all text-xs font-bold border border-bento-border shadow-sm group"
+                >
+                  <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-amafil-blue">
+                    <Package className="w-4 h-4" />
+                  </div>
+                  Pedido Almoxarifado (ALM)
+                </button>
+                <button
+                  onClick={() => setActiveSupportForm('PCP')}
+                  className="w-full h-12 bg-white hover:bg-gray-50 text-gray-700 rounded-2xl flex items-center gap-3 px-4 transition-all text-xs font-bold border border-bento-border shadow-sm group"
+                >
+                  <div className="w-8 h-8 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
+                    <ClipboardList className="w-4 h-4" />
+                  </div>
+                  Dúvida PCP / Apontamento
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

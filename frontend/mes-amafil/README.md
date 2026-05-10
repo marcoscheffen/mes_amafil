@@ -65,6 +65,7 @@ Após alterações relevantes ao roteamento ou ao deploy, mantenha esta seção 
 
 ## Atualizações recentes
 
+- Em `ProductionExecution`, o botão **Solicitar Reforço** agora abre o menu de **Ações Rápidas** e, na sequência, exibe formulário modal no mesmo padrão de `SupportRequests` (MNT, ALM e PCP).
 - Navegação do menu lateral ajustada para SPA na Vercel: `NavLink` + `vercel.json` com rewrite para `index.html`.
 - A página `/producao` foi atualizada para usar uma lista expandida de máquinas e linhas de empacotamento baseada nos documentos `Informações/Maquinas e processos.md` e `Informações/Fluxo_geral.md`.
 - O monitoramento em Produção agora contempla os setores Diversos, Farinha, Polvilho e Massa Tapioca com códigos de máquina no padrão operacional (ex.: `EMP-01A`, `COL-03A`, `ENS-22A-KSP`).
