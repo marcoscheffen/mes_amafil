@@ -46,6 +46,8 @@ Um sistema web/mobile que:
 - Registra paradas, perdas e auxiliares em tempo real
 - Devolve os apontamentos ao Protheus ao finalizar cada OP
 - Oferece dashboards de acompanhamento para PCP, Manutenção e Gestão
+- Valida lote e validade da embalagem via OCR com Google Gemini Vision AI
+- Disponibiliza mensagens internas por canais (Geral, Manutenção, PCP, Urgentes)
 
 ### 1.4 Escopo
 
@@ -379,7 +381,16 @@ Os campos abaixo são preenchidos pelo sistema com base no contexto do operador:
 | Concluída | Solicitante aprovou a conclusão |
 | Recusada | Solicitante recusou — exige observações e reabertura |
 
-### 8.4 Regras de negócio
+### 8.5 Tipos de solicitação suportados
+
+| Tipo | Setor destino |
+|---|---|
+| Manutenção | Setor Manutenção |
+| Material / Almoxarifado | Setor Almoxarifado |
+| PCP | Setor PCP |
+| Qualidade | Setor Qualidade |
+
+### 8.6 Regras de negócio
 
 - Qualquer usuário (operador ou demais perfis) pode enviar solicitações a qualquer setor
 - O setor destino pode iniciar o atendimento e registrar a execução
@@ -407,9 +418,9 @@ Os campos abaixo são preenchidos pelo sistema com base no contexto do operador:
 ┌──────────────┬────────────────────────────────────────┐
 │   Sidebar    │           Content Area                  │
 │  (240px)     │     (fundo cinza claro #F5F6FA)         │
-│  dark navy   │                                         │
-│  #1A1D2E     │  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐  │
-│              │  │ KPI  │ │ KPI  │ │ KPI  │ │ KPI  │  │
+│  branco      │                                         │
+│  borda dir.  │  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐  │
+│  #E5E7EB     │  │ KPI  │ │ KPI  │ │ KPI  │ │ KPI  │  │
 │  [Logo]      │  │ card │ │ card │ │ card │ │ card │  │
 │              │  └──────┘ └──────┘ └──────┘ └──────┘  │
 │  > Dashboard │                                         │
@@ -421,7 +432,9 @@ Os campos abaixo são preenchidos pelo sistema com base no contexto do operador:
 └──────────────┴────────────────────────────────────────┘
 ```
 
-- Sidebar fixa: ~240px, fundo `#1A1D2E`, item ativo `#2563EB`
+- Sidebar fixa: ~240px, fundo `#FFFFFF`, borda direita `1px solid #E5E7EB`
+- Item ativo: fundo `#EFF6FF`, texto/ícone `#2563EB`, border-radius 8px
+- Item inativo: texto `#6B7280`; hover: fundo `#F5F6FA`
 - Content area: fundo `#F5F6FA`, cards brancos `#FFFFFF` com sombra suave
 - Border-radius dos cards: 12px
 
@@ -431,8 +444,12 @@ Os campos abaixo são preenchidos pelo sistema com base no contexto do operador:
 
 | Nome | Hex | Uso |
 |---|---|---|
-| Sidebar background | `#1A1D2E` | Fundo do menu lateral |
-| Sidebar item ativo | `#2563EB` | Item selecionado |
+| Sidebar background | `#FFFFFF` | Fundo do menu lateral |
+| Sidebar border | `#E5E7EB` | Borda direita da sidebar |
+| Sidebar item ativo (bg) | `#EFF6FF` | Fundo do item selecionado |
+| Sidebar item ativo (texto) | `#2563EB` | Texto/ícone do item ativo |
+| Sidebar item inativo | `#6B7280` | Texto/ícone dos itens normais |
+| Sidebar hover | `#F5F6FA` | Fundo ao passar o mouse |
 | Content background | `#F5F6FA` | Fundo da área de conteúdo |
 | Card background | `#FFFFFF` | Fundo de cards e painéis |
 | Texto principal | `#111827` | Títulos e valores |
@@ -458,6 +475,7 @@ Os campos abaixo são preenchidos pelo sistema com base no contexto do operador:
 | Material | `#3B82F6` |
 | Operacional | `#8B5CF6` |
 | Planejada | `#22C55E` |
+| Qualidade | `#06B6D4` |
 
 #### Performance por faixa (tabelas)
 
@@ -530,14 +548,20 @@ Finalizada:   bg #F3F4F6, text #9CA3AF
 
 ```css
 /* Estrutura */
---color-sidebar-bg:      #1A1D2E;
---color-content-bg:      #F5F6FA;
---color-card-bg:         #FFFFFF;
---color-border:          #E5E7EB;
+--color-sidebar-bg:          #FFFFFF;
+--color-sidebar-border:      #E5E7EB;
+--color-sidebar-active-bg:   #EFF6FF;
+--color-sidebar-active-text: #2563EB;
+--color-sidebar-text:        #6B7280;
+--color-sidebar-hover-bg:    #F5F6FA;
+--color-content-bg:          #F5F6FA;
+--color-card-bg:             #FFFFFF;
+--color-border:              #E5E7EB;
 
 /* Texto */
 --color-text-primary:    #111827;
 --color-text-secondary:  #6B7280;
+--color-text-tertiary:   #9CA3AF;
 
 /* Ações */
 --color-action-primary:  #2563EB;
@@ -563,6 +587,7 @@ Finalizada:   bg #F3F4F6, text #9CA3AF
 --color-material:        #3B82F6;
 --color-operator:        #8B5CF6;
 --color-planned:         #22C55E;
+--color-quality:         #06B6D4;
 ```
 
 ---
@@ -808,6 +833,7 @@ Cada perfil acessa um ambiente distinto: tela inicial, navegação lateral, info
 | Máquinas | ✓ | ✓ | — | ✓ | — | — | — |
 | Paradas | ✓ | ✓ | — | ✓ | — | ✓ | — |
 | Solicitações | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Mensagens | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | Relatórios | ✓ | ✓ | ✓ | ✓ | — | — | — |
 | Usuários | ✓ | ✓ | ✓ | — | — | — | — |
 | Integração Protheus | ✓ | — | ✓ | — | — | — | — |

@@ -322,32 +322,37 @@ Request → JWT validation → extract empresa_id + user_perfil → SET session 
 
 ### 6.1 Decisões
 
-| Item | Escolha | Motivo |
-|---|---|---|
-| Framework | Next.js 15 | React 19, App Router, ecosistema maduro; utilizado pelo build tooling e PWA |
-| Deploy mode | **Static Export (SPA)** | Servido pelo Nginx — sem servidor Node em produção. SSR desabilitado. Auth redirect tratado no cliente via Zustand + GoTrue SDK. |
-| PWA | `next-pwa` + Service Worker | Operação offline, instalável em tablets |
-| Estado global | Zustand | Leve, simples, TypeScript-friendly |
-| UI components | shadcn/ui + Tailwind | Design system consistente, tokens CSS customizáveis |
-| Ícones | Lucide React | Leve e consistente |
-| Gráficos | Recharts | Maduro, composable, compatível com React 19 |
-| Formulários | React Hook Form + Zod | Validação type-safe, integra com esquemas da API |
+> **Protótipo atual:** React 19 + Vite 6 + React Router 7 (SPA com dados mockados).
+> **Alvo de produção:** migração para Next.js 15 Static Export conforme descrito abaixo.
+
+| Item | Protótipo atual | Alvo de produção | Motivo |
+|---|---|---|---|
+| Framework | **React 19 + Vite 6** | **Next.js 15** | Protótipo validou UX; Next.js traz build tooling e PWA |
+| Roteamento | React Router DOM 7 | Next.js App Router | — |
+| Deploy mode | Vite build + Express | **Static Export (SPA)** — Nginx | SSR desabilitado; Auth no cliente via GoTrue SDK |
+| PWA | — | `next-pwa` + Service Worker | Operação offline, instalável em tablets |
+| Estado global | — | Zustand | Leve, simples, TypeScript-friendly |
+| UI components | **Tailwind CSS 4** | Tailwind CSS + shadcn/ui | Design system consistente, tokens CSS customizáveis |
+| Ícones | Lucide React | Lucide React | Leve e consistente |
+| Gráficos | **Recharts 3** | Recharts | Maduro, composable, compatível com React 19 |
+| Formulários | — | React Hook Form + Zod | Validação type-safe, integra com esquemas da API |
+| Vision AI | **@google/genai (Gemini)** | @google/genai (Gemini) | OCR de rótulos: valida lote e validade via câmera |
 
 ### 6.2 Telas previstas
 
-| Tela | Perfil | Descrição |
-|---|---|---|
-| Login | Todos | Autenticação com email/senha |
-| Dashboard | PCP, Admin | KPIs de produção em tempo real |
-| Lista de OPs | PCP, Operação | OPs filtradas por status |
-| Detalhes da OP | PCP, Operação | Cabeçalho + componentes (somente leitura) |
-| Apontamento | Operação | Início/parada/finalização de turno |
-| Registro de parada | Operação | Motivo + hora + solicitação de manutenção |
-| Solicitações | Todos | Envio e acompanhamento |
-| Atendimento | Manutenção, Almox | Lista e gestão de solicitações recebidas |
-| Status das máquinas | PCP, Admin | Grid com status em tempo real |
-| Usuários | Master, Admin, TI | Cadastro e gestão |
-| Configurações | TI, Master | Integração Protheus, parâmetros da empresa |
+| Tela | Rota | Perfil | Descrição |
+|---|---|---|---|
+| Login | `/login` | Todos | Autenticação com email/senha |
+| Dashboard | `/` | PCP, Admin | KPIs de produção em tempo real |
+| Produção / Máquinas | `/producao` | PCP, Admin | Grid com status em tempo real das máquinas |
+| Lista de OPs | `/ops` | PCP, Operação | OPs filtradas por status; sincronização com Protheus |
+| Execução / Apontamento | `/operacao` | Operação | Início/parada/finalização de turno; OCR via Gemini |
+| Paradas / Downtime | `/paradas` | PCP, Admin, Manutenção | Análise de paradas por categoria; Pareto |
+| Solicitações | `/solicitacoes` | Todos | Envio e acompanhamento (Manutenção, Almox, PCP, Qualidade) |
+| Relatórios | `/relatorios` | PCP, Admin, TI | BI & Analytics com exportação XLSX/PDF |
+| Mensagens | `/mensagens` | Todos | Comunicação interna por canais (Geral, Manutenção, PCP, Urgentes) |
+| Usuários | `/usuarios` | Master, Admin, TI | Cadastro e gestão de identidades |
+| Configurações | `/config` | TI, Master | Integração Protheus, parâmetros da empresa |
 
 ### 6.3 Responsividade
 

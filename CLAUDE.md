@@ -1,0 +1,79 @@
+# CLAUDE.md — Regras do Projeto MES
+
+---
+
+## 1. Leitura obrigatória antes de qualquer execução
+
+Antes de iniciar qualquer tarefa, leia os seguintes arquivos para entender o estado atual do projeto:
+
+1. `.agents/README.md` — índice de skills disponíveis e stack do projeto
+2. `README.md` do módulo ou subpasta relevante (ex: `frontend/mes-amafil/README.md`)
+3. A skill correspondente à tarefa (ver seção abaixo)
+
+> Nunca assuma o estado do projeto sem ler esses arquivos primeiro. Eles são a fonte de verdade sobre o que foi feito.
+
+---
+
+## 2. Uso obrigatório de skills
+
+Identifique a skill aplicável antes de agir. Use a tabela abaixo como guia:
+
+| Tipo de tarefa | Skill | Arquivo |
+|---|---|---|
+| Regras de negócio MES (OPs, apontamentos, perfis) | `/mes` | `.agents/mes.md` |
+| Backend API (rotas, middleware, BullMQ) | `/api` | `.agents/api.md` |
+| Frontend (páginas, componentes, PWA) | `/frontend` | `.agents/frontend.md` |
+| Integração Protheus | `/protheus` | `.agents/protheus.md` |
+| Banco de dados / Supabase | `/supabase` | `.agents/supabase.md` |
+| Infraestrutura (Docker, Nginx, servidor) | `/infra` | `.agents/infra.md` |
+| Design system (cores, tokens, componentes UI) | `/design-system` | `.agents/design-system.md` |
+| Criar ou atualizar README.md | `/readme` | `.agents/skill-readme.md` |
+| Criar ou melhorar skills | `/skill-creator` | `.agents/skill-creator.md` |
+
+Se a tarefa não mapear para nenhuma skill listada, verificar `.agents/README.md` — pode haver skills adicionais.
+
+---
+
+## 3. Atualização obrigatória de README
+
+Após qualquer alteração relevante no projeto, atualize o README correspondente:
+
+- Alterações em um módulo → atualizar o `README.md` daquele módulo
+- Novas skills → registrar em `.agents/README.md`
+- Mudanças de arquitetura, stack ou fluxo → atualizar `README.md` raiz
+
+O README deve refletir **o que está implementado agora**, não o que estava planejado.
+
+---
+
+## 4. Skills do projeto
+
+Todas as skills específicas deste projeto **devem ser criadas e mantidas em `.agents/`**.
+
+- Extensão `.md`, nome descritivo (ex: `seed-mock.md`, `design-system.md`)
+- Ao criar uma skill nova, registrá-la em `.agents/README.md`
+- Skills globais (`~/.claude/skills/`) são para comportamentos que se aplicam a todos os projetos
+
+### Formato mínimo de uma skill
+
+```markdown
+# Nome da Skill
+
+## Objetivo
+Descrição clara do que a skill faz.
+
+## Quando usar
+Gatilhos ou contextos em que esta skill deve ser aplicada.
+
+## Instruções
+Passos ou regras que o agente deve seguir.
+```
+
+---
+
+## 5. Regras gerais
+
+- Nunca fazer alterações destrutivas (drop, delete, rm -rf, reset) sem confirmação explícita
+- Preferir edição de arquivos existentes a criar novos
+- Não commitar automaticamente — sempre aguardar instrução explícita
+- Respostas em português (Brasil)

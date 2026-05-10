@@ -149,27 +149,24 @@ Referência visual baseada nos mockups do sistema MES com telas: Executive Dashb
 
 ### Cores de status / semântica
 
-| Status | Hex | Uso |
-|--------|-----|-----|
-| On Track / Running / Good | `#16A34A` | Verde — meta atingida, máquina operando |
-| On Track (bg badge) | `#DCFCE7` | Fundo badge verde |
-| At Risk / Warning | `#F59E0B` | Âmbar — atenção, alerta moderado |
-| Warning (bg badge) | `#FEF3C7` | Fundo badge âmbar |
-| Critical / Stopped / Bad | `#EF4444` | Vermelho — falha crítica, parado |
-| Critical (bg badge) | `#FEE2E2` | Fundo badge vermelho |
-| Offline / Inactive | `#9CA3AF` | Cinza — equipamento offline |
-| Offline (bg badge) | `#F3F4F6` | Fundo badge cinza |
-| Azul primário (botões, links) | `#2563EB` | Ações primárias, export Excel |
+| Status | Hex texto | Hex fundo | Uso |
+|--------|-----------|-----------|-----|
+| On Track / Running / Good | `#16A34A` | `#DCFCE7` | Verde — meta atingida, máquina operando |
+| At Risk / Warning | `#D97706` | `#FEF3C7` | Âmbar — atenção, alerta moderado |
+| Critical / Stopped / Bad | `#DC2626` | `#FEE2E2` | Vermelho — falha crítica, parado |
+| Offline / Inactive | `#9CA3AF` | `#F3F4F6` | Cinza — equipamento offline |
+| Info / Primário | `#2563EB` | `#EFF6FF` | Ações primárias, item ativo |
 
 ### Cores dos gráficos — Downtime por categoria
 
 | Categoria | Hex | Nome |
 |-----------|-----|------|
-| Mechanical | `#EF4444` | Vermelho |
-| Electrical | `#F59E0B` | Âmbar |
+| Mecânica | `#EF4444` | Vermelho |
+| Elétrica | `#F59E0B` | Âmbar |
 | Material | `#3B82F6` | Azul |
-| Operator | `#8B5CF6` | Roxo |
-| Planned Maintenance | `#22C55E` | Verde |
+| Operacional | `#8B5CF6` | Roxo |
+| Planejada | `#22C55E` | Verde |
+| Qualidade | `#06B6D4` | Ciano |
 
 ### Cores dos gráficos — Charts gerais
 

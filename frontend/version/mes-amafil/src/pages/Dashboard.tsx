@@ -173,8 +173,8 @@ export function Dashboard() {
       <div className="card-mes p-0 overflow-hidden shadow-sm">
         <div className="px-8 py-5 border-b border-bento-border bg-gray-50/80 flex justify-between items-center">
           <div>
-            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nós em Execução Ativos</h3>
-            <p className="text-sm font-bold text-gray-900">Status de Operação do Cluster</p>
+            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Em Execução</h3>
+            <p className="text-sm font-bold text-gray-900">Status de Operação</p>
           </div>
           <div className="flex gap-2">
             <div className="w-3 h-3 rounded-full bg-gray-200"></div>
