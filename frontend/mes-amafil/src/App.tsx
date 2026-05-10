@@ -27,7 +27,6 @@ function Layout() {
   return (
     <div className="min-h-screen bg-bento-bg">
       <Sidebar 
-        currentPath={location.pathname} 
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)} 
       />

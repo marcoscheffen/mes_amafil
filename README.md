@@ -8,7 +8,7 @@ Sistema de Execução de Manufatura para a Amafil — substitui formulários fí
 
 O MES importa automaticamente as OPs do ERP TOTVS Protheus, permite ao operador apontar a produção digitalmente por turno e devolve os apontamentos ao Protheus ao finalizar cada OP. Inclui dashboards de produção em tempo real, mensagens internas por canais e validação de lote/validade por OCR via Google Gemini Vision AI.
 
-**Estado atual:** protótipo funcional do frontend (React 19 + Vite) com todas as telas implementadas e dados mockados. Backend e banco de dados em fase de design (PRDs concluídos).
+**Estado atual:** protótipo funcional do frontend (React 19 + Vite) com todas as telas implementadas e dados mockados. Backend e banco de dados em fase de design (PRDs concluídos). O deploy de preview na Vercel usa SPA com `NavLink` no menu e `vercel.json` (rewrite para `index.html`); detalhes em [frontend/mes-amafil/README.md](frontend/mes-amafil/README.md).
 
 ---
 

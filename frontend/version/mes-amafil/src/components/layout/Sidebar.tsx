@@ -1,10 +1,10 @@
 import { LayoutDashboard, Factory, AlertTriangle, FileText, Settings, Users, ClipboardList, PlayCircle, MessageSquare, X } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 import { NavItem } from '../../types';
 import { cn } from '../../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface SidebarProps {
-  currentPath: string;
   isOpen?: boolean;
   onClose?: () => void;
 }
@@ -22,7 +22,7 @@ const navItems: NavItem[] = [
   { label: 'Configurações', href: '/config', icon: Settings },
 ];
 
-export function Sidebar({ currentPath, isOpen, onClose }: SidebarProps) {
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <>
       {/* Mobile Overlay */}
@@ -57,23 +57,26 @@ export function Sidebar({ currentPath, isOpen, onClose }: SidebarProps) {
       
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto mt-4">
         {navItems.map((item) => {
-          const isActive = currentPath === item.href;
           const Icon = item.icon;
           
           return (
-            <a
+            <NavLink
               key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all duration-200",
-                isActive 
-                  ? "bg-[#EFF6FF] text-[#2563EB] shadow-sm font-bold" 
-                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-              )}
+              to={item.href}
+              end={item.href === '/'}
+              onClick={() => onClose?.()}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all duration-200",
+                  isActive
+                    ? "bg-[#EFF6FF] text-[#2563EB] shadow-sm font-bold [&_svg]:text-[#2563EB]"
+                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900 [&_svg]:text-gray-400"
+                )
+              }
             >
-              <Icon className={cn("w-5 h-5", isActive ? "text-[#2563EB]" : "text-gray-400")} />
+              <Icon className="w-5 h-5" />
               {item.label}
-            </a>
+            </NavLink>
           );
         })}
       </nav>

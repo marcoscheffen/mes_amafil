@@ -54,8 +54,18 @@ src/
 | `/mensagens` | Mensagens |
 | `/config` | Configurações |
 
+## Deploy na Vercel (SPA)
+
+O app é uma SPA (React Router). Para o menu e URLs diretas funcionarem em produção:
+
+1. **`NavLink` no menu lateral** — Os itens em `src/components/layout/Sidebar.tsx` usam `NavLink` do React Router (não `<a href>`), evitando recarga completa ao trocar de rota.
+2. **`vercel.json`** — Rewrite de todas as rotas para `index.html`, para que refresh ou link direto (ex.: `/operacao`) não retornem 404. Arquivos estáticos do build (`/assets/*`, etc.) continuam sendo servidos pela Vercel antes do rewrite.
+
+Após alterações relevantes ao roteamento ou ao deploy, mantenha esta seção alinhada ao que está no repositório.
+
 ## Atualizações recentes
 
+- Navegação do menu lateral ajustada para SPA na Vercel: `NavLink` + `vercel.json` com rewrite para `index.html`.
 - A página `/producao` foi atualizada para usar uma lista expandida de máquinas e linhas de empacotamento baseada nos documentos `Informações/Maquinas e processos.md` e `Informações/Fluxo_geral.md`.
 - O monitoramento em Produção agora contempla os setores Diversos, Farinha, Polvilho e Massa Tapioca com códigos de máquina no padrão operacional (ex.: `EMP-01A`, `COL-03A`, `ENS-22A-KSP`).
 
