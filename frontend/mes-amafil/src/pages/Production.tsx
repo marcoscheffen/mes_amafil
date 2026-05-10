@@ -1,15 +1,85 @@
-import { Play, Pause, Square, FileText, Wrench, Package, AlertCircle, Activity, Gauge, Clock, LayoutGrid, List, ChevronDown } from 'lucide-react';
+import { FileText, Wrench, Package, AlertCircle, Activity, Gauge, Clock, LayoutGrid, List, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '../lib/utils';
 import { Machine } from '../types';
 
-const machines: (Machine & { oee: number; availability: number; quality: number; prod: string })[] = [
-  { id: '30', codigo: '30', nome: 'Empacotadora Stand-up 30', status: 'OPERANDO', lastOP: 'M01376', oee: 88.5, availability: 92, quality: 99.1, prod: '1,250 CX' },
-  { id: '32', codigo: '32', nome: 'Empacotadora Stand-up 32', status: 'OPERANDO', lastOP: 'M01385', oee: 76.2, availability: 80, quality: 98.5, prod: '840 CX' },
-  { id: '15', codigo: '15', nome: 'Ensacadeira Automática 15', status: 'PARADA', lastOP: 'M01390', oee: 0, availability: 0, quality: 100, prod: '0 SC' },
-  { id: '08', codigo: '08', nome: 'Costuradeira de Sacaria 08', status: 'MANUTENCAO', lastOP: 'M01402', oee: 0, availability: 0, quality: 0, prod: '0 SC' },
-  { id: '02', codigo: '02', nome: 'Coladeira de Papelão 02', status: 'OFFLINE', lastOP: '-', oee: 0, availability: 0, quality: 0, prod: '-' },
+type ProductionMachine = Machine & {
+  setor: string;
+  linha: string;
+  processo: string;
+  equipamentoAuxiliar: string;
+  oee: number;
+  availability: number;
+  quality: number;
+  prod: string;
+};
+
+const machineCatalog: Array<Omit<ProductionMachine, 'oee' | 'availability' | 'quality' | 'prod' | 'lastOP'>> = [
+  { id: 'EMP-01A', codigo: 'EMP-01A', nome: 'Empacotadora 01-A MG1000 Indumak', setor: 'Diversos', linha: 'L01', processo: 'Empacotamento Graos', equipamentoAuxiliar: 'Enfardadeira E01-A MK30', status: 'OPERANDO' },
+  { id: 'EMP-01B', codigo: 'EMP-01B', nome: 'Empacotadora 01-B MG1000 Indumak', setor: 'Diversos', linha: 'L01', processo: 'Empacotamento Graos', equipamentoAuxiliar: '-', status: 'OPERANDO' },
+  { id: 'EMP-02A', codigo: 'EMP-02A', nome: 'Empacotadora 02-A MG1000 Indumak', setor: 'Diversos', linha: 'L02', processo: 'Empacotamento Pipoca', equipamentoAuxiliar: 'Enfardadeira E02-A MK30', status: 'OPERANDO' },
+  { id: 'EMP-09A', codigo: 'EMP-09A', nome: 'Empacotadora 09-A MG1000 Indumak', setor: 'Diversos', linha: 'L09', processo: 'Empacotamento Farofa', equipamentoAuxiliar: 'Enfardadeira E09-A SE2500', status: 'OPERANDO' },
+  { id: 'EMP-09B', codigo: 'EMP-09B', nome: 'Empacotadora 09-B MG1000 Indumak', setor: 'Diversos', linha: 'L09', processo: 'Empacotamento Farofa', equipamentoAuxiliar: 'Enfardadeira E09-B SE2500', status: 'OPERANDO' },
+  { id: 'EMP-10A', codigo: 'EMP-10A', nome: 'Empacotadora 10-A MG1000 Indumak', setor: 'Diversos', linha: 'L10', processo: 'Empacotamento Food Service', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-11A', codigo: 'EMP-11A', nome: 'Empacotadora 11-A MM-5000 Indumak', setor: 'Diversos', linha: 'L11', processo: 'Empacotamento Biju', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-12A', codigo: 'EMP-12A', nome: 'Empacotadora 12-A CB1000 Indumak', setor: 'Diversos', linha: 'L12', processo: 'Empacotamento Creme', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-14A', codigo: 'EMP-14A', nome: 'Empacotadora 14-A MG8000 Indumak', setor: 'Diversos', linha: 'L14', processo: 'Empacotamento Pao de Queijo', equipamentoAuxiliar: 'Enfardadeira E14-A SE5000', status: 'OPERANDO' },
+  { id: 'EMP-14B', codigo: 'EMP-14B', nome: 'Empacotadora 14-B DG-4', setor: 'Diversos', linha: 'L14', processo: 'Empacotamento Pao de Queijo', equipamentoAuxiliar: 'Enfardadeira E14-B MK30', status: 'OPERANDO' },
+  { id: 'EMP-14C', codigo: 'EMP-14C', nome: 'Empacotadora 14-C MG1000 Indumak', setor: 'Diversos', linha: 'L14', processo: 'Empacotamento Pao de Queijo', equipamentoAuxiliar: 'Enfardadeira E14-C MK30', status: 'OPERANDO' },
+  { id: 'ENS-15-BICA1', codigo: 'ENS-15-B1', nome: 'Ensacadeira Bica Manual 01', setor: 'Diversos', linha: 'L15', processo: 'Empacotamento Amid Mais', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'ENS-15-BICA2', codigo: 'ENS-15-B2', nome: 'Ensacadeira Bica Manual 02', setor: 'Diversos', linha: 'L15', processo: 'Empacotamento Amid Mais', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'ENS-15-INSACK', codigo: 'ENS-15-I', nome: 'Ensacadeira Automatica Insack', setor: 'Diversos', linha: 'L15', processo: 'Empacotamento Amid Mais', equipamentoAuxiliar: 'Paletizacao manual', status: 'OPERANDO' },
+  { id: 'ENS-15-KSP', codigo: 'ENS-15-K', nome: 'Ensacadeira Semi-Automatica KSP Indumak', setor: 'Diversos', linha: 'L15', processo: 'Empacotamento Amid Mais', equipamentoAuxiliar: 'Paletizacao manual', status: 'PARADA' },
+  { id: 'ENS-15-HAVER', codigo: 'ENS-15-H', nome: 'Ensacadeira Automatica Haver', setor: 'Diversos', linha: 'L15', processo: 'Empacotamento Amid Mais', equipamentoAuxiliar: 'Paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-28A', codigo: 'EMP-28A', nome: 'Empacotadora 28-A SP-500 Systempack', setor: 'Diversos', linha: 'L28', processo: 'Empacotamento Bolo', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'COL-03A', codigo: 'COL-03A', nome: 'Coladeira-Seladora 03-A FE II Embrapac', setor: 'Farinha', linha: 'L03', processo: 'Farinha Pacote Papel', equipamentoAuxiliar: 'Dosador de balanca', status: 'MANUTENCAO' },
+  { id: 'EMP-04A', codigo: 'EMP-04A', nome: 'Empacotadora 04-A CG1000 Indumak', setor: 'Farinha', linha: 'L04', processo: 'Farinha Branca Plastico', equipamentoAuxiliar: 'Enfardadeira E04-A MK30', status: 'OPERANDO' },
+  { id: 'EMP-04B', codigo: 'EMP-04B', nome: 'Empacotadora 04-B CG1000 Indumak', setor: 'Farinha', linha: 'L04', processo: 'Farinha Branca Plastico', equipamentoAuxiliar: '-', status: 'OPERANDO' },
+  { id: 'EMP-05A', codigo: 'EMP-05A', nome: 'Empacotadora 05-A MG1000 Indumak', setor: 'Farinha', linha: 'L05', processo: 'Farinha Amarela Plastico', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'COS-06A', codigo: 'COS-06A', nome: 'Costuradeira 06-A MF-3B Matisa', setor: 'Farinha', linha: 'L06', processo: 'Farinha Torrada Papel', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'COS-06B', codigo: 'COS-06B', nome: 'Costuradeira 06-B MF-3B Matisa', setor: 'Farinha', linha: 'L06', processo: 'Farinha Torrada Papel', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-07A', codigo: 'EMP-07A', nome: 'Empacotadora 07-A ERMD120 Indumak', setor: 'Farinha', linha: 'L07', processo: 'Farinha Torrada Plastico', equipamentoAuxiliar: 'Enfardadeira E07-A MK30', status: 'OPERANDO' },
+  { id: 'EMP-07B', codigo: 'EMP-07B', nome: 'Empacotadora 07-B ERMD120 Indumak', setor: 'Farinha', linha: 'L07', processo: 'Farinha Torrada Plastico', equipamentoAuxiliar: '-', status: 'OPERANDO' },
+  { id: 'EMP-07C', codigo: 'EMP-07C', nome: 'Empacotadora 07-C ERMD120 Indumak', setor: 'Farinha', linha: 'L07', processo: 'Farinha Torrada Plastico', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-29', codigo: 'EMP-29', nome: 'Empacotadora Semi-Automatica Forline 3000', setor: 'Farinha', linha: 'L29', processo: 'Farinha Extra E70', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-29A', codigo: 'EMP-29A', nome: 'Empacotadora Semi-Automatica 29-A MG8000', setor: 'Farinha', linha: 'L29', processo: 'Farinha Extra E70', equipamentoAuxiliar: 'Enfardadeira E29-A MK40', status: 'OPERANDO' },
+  { id: 'EMP-29B', codigo: 'EMP-29B', nome: 'Empacotadora Semi-Automatica 29-B MG8000', setor: 'Farinha', linha: 'L29', processo: 'Farinha Extra E70', equipamentoAuxiliar: 'Enfardadeira E29-B MK40', status: 'OPERANDO' },
+  { id: 'EMP-16A', codigo: 'EMP-16A', nome: 'Empacotadora 16-A FP1000 Indumak', setor: 'Polvilho', linha: 'L16', processo: 'Polvilho Azedo/Doce Plastico', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-17A', codigo: 'EMP-17A', nome: 'Empacotadora 17-A FP1000 Indumak', setor: 'Polvilho', linha: 'L17', processo: 'Polvilho Azedo/Doce Plastico', equipamentoAuxiliar: 'Enfardadeira E17-A MK30', status: 'OPERANDO' },
+  { id: 'COL-18A', codigo: 'COL-18A', nome: 'Bica de Envase Coladeira 18-A', setor: 'Polvilho', linha: 'L18', processo: 'Polvilho Azedo/Doce Papel', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'COL-18B', codigo: 'COL-18B', nome: 'Bica de Envase Coladeira 18-B', setor: 'Polvilho', linha: 'L18', processo: 'Polvilho Azedo/Doce Papel', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'COL-18C', codigo: 'COL-18C', nome: 'Bica de Envase Coladeira 18-C', setor: 'Polvilho', linha: 'L18', processo: 'Polvilho Azedo/Doce Papel', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-18D', codigo: 'EMP-18D', nome: 'Empacotadora 18-D', setor: 'Polvilho', linha: 'L18', processo: 'Polvilho Azedo/Doce Papel', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-21A', codigo: 'EMP-21A', nome: 'Empacotadora 21-A MM250 Indumak', setor: 'Polvilho', linha: 'L21', processo: 'Polvilho Diversos Plastico', equipamentoAuxiliar: 'Enfardadeira E21-A MK40', status: 'OPERANDO' },
+  { id: 'EMP-21B', codigo: 'EMP-21B', nome: 'Empacotadora 21-B MM250 Indumak', setor: 'Polvilho', linha: 'L21', processo: 'Polvilho Diversos Plastico', equipamentoAuxiliar: '-', status: 'OPERANDO' },
+  { id: 'ENS-22B-BICA1', codigo: 'ENS-22B-B1', nome: 'Ensacadeira Bica Manual 22-B 01', setor: 'Polvilho', linha: 'L22', processo: 'Polvilho 25kg', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'ENS-22B-BICA2', codigo: 'ENS-22B-B2', nome: 'Ensacadeira Bica Manual 22-B 02', setor: 'Polvilho', linha: 'L22', processo: 'Polvilho 25kg', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'ENS-22A-KSP', codigo: 'ENS-22A-K', nome: 'Ensacadeira Semi-Automatica 22-A KSP', setor: 'Polvilho', linha: 'L22', processo: 'Polvilho 25kg', equipamentoAuxiliar: 'Paletizacao manual', status: 'OPERANDO' },
+  { id: 'ENS-22A-BICA', codigo: 'ENS-22A-B', nome: 'Ensacadeira Bica Manual 22-A', setor: 'Polvilho', linha: 'L22', processo: 'Polvilho 25kg', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
+  { id: 'EMP-33A', codigo: 'EMP-33A', nome: 'Empacotadora 33-A MR5000 Sautec', setor: 'Polvilho', linha: 'L33', processo: 'Polvilho Diversos Plastico', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OFFLINE' },
+  { id: 'EMP-30A', codigo: 'EMP-30A', nome: 'Empacotadora 30-A MG1000 Indumak', setor: 'Massa Tapioca', linha: 'L30', processo: 'Massa Tapioca Plastico', equipamentoAuxiliar: 'Empacotamento/paletizacao manual', status: 'OPERANDO' },
 ];
+
+const machines: ProductionMachine[] = machineCatalog.map((machine, index) => {
+  const isRunning = machine.status === 'OPERANDO';
+  const oee = isRunning ? Number((78 + ((index * 3) % 17)).toFixed(1)) : 0;
+  const availability = isRunning ? Number((84 + ((index * 2) % 12)).toFixed(1)) : 0;
+  const quality = isRunning ? Number((95 + ((index * 4) % 5) * 0.6).toFixed(1)) : 0;
+
+  return {
+    ...machine,
+    lastOP: isRunning ? `M0${(1376 + index).toString().padStart(4, '0')}` : '-',
+    oee,
+    availability,
+    quality,
+    prod: isRunning ? `${(640 + index * 18).toLocaleString('pt-BR')} KG` : '0 KG',
+  };
+});
+
+function getMachineNodeLabel(codigo: string): string {
+  const match = codigo.match(/(\d+[A-Z]?)$/);
+  return match ? match[1] : codigo;
+}
 
 export function Production() {
   const [viewMode, setViewMode] = useState<'CARDS' | 'LIST'>('CARDS');
@@ -26,7 +96,7 @@ export function Production() {
         <div className="flex flex-wrap gap-3 w-full sm:w-auto">
           <div className="flex-1 sm:flex-none justify-center bg-white px-5 py-2.5 rounded-full border border-bento-border text-[10px] lg:text-xs font-bold text-gray-500 flex items-center gap-2 shadow-sm">
             <span className="w-2.5 h-2.5 rounded-full bg-status-success animate-pulse shadow-sm"></span>
-            Total: 05
+            Total: {machines.length.toString().padStart(2, '0')}
           </div>
           
           <div className="relative flex-1 sm:flex-none">
@@ -78,7 +148,7 @@ export function Production() {
           </div>
           <div>
             <h4 className="text-[10px] font-black text-status-danger uppercase tracking-widest">Alerta Crítico</h4>
-            <p className="text-sm font-bold text-gray-900 italic">Máquina 08 em manutenção mecânica excedida</p>
+            <p className="text-sm font-bold text-gray-900 italic">COL-03A em manutenção mecânica acima do tempo previsto</p>
           </div>
         </div>
         <div className="card-mes bg-amber-50 border-status-warning/20 p-4 flex items-center gap-4">
@@ -87,7 +157,7 @@ export function Production() {
           </div>
           <div>
             <h4 className="text-[10px] font-black text-status-warning uppercase tracking-widest">Atenção</h4>
-            <p className="text-sm font-bold text-gray-900 italic">Setup da OP M01390 atrasado em 15min</p>
+            <p className="text-sm font-bold text-gray-900 italic">ENS-15-KSP parada aguardando setup da OP atual</p>
           </div>
         </div>
         <div className="card-mes bg-blue-50 border-amafil-blue/20 p-4 flex items-center gap-4">
@@ -96,7 +166,7 @@ export function Production() {
           </div>
           <div>
             <h4 className="text-[10px] font-black text-amafil-blue uppercase tracking-widest">Informação</h4>
-            <p className="text-sm font-bold text-gray-900 italic">Troca de turno prevista para as 13:45</p>
+            <p className="text-sm font-bold text-gray-900 italic">Base sincronizada com 43 maquinas mapeadas no fluxo geral</p>
           </div>
         </div>
       </div>
@@ -130,6 +200,9 @@ export function Production() {
                       </span>
                     </div>
                     <h3 className="text-lg lg:text-xl font-bold tracking-tight text-gray-900 italic truncate" title={machine.nome}>{machine.nome}</h3>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-2 truncate">
+                      {machine.setor} / {machine.linha} - {machine.processo}
+                    </p>
                   </div>
                   {machine.status === 'OPERANDO' && (
                     <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-green-50 flex items-center justify-center shrink-0">
@@ -224,7 +297,7 @@ export function Production() {
                   <th className="py-4 px-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Máquina</th>
                   <th className="py-4 px-4 text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Status Lab</th>
                   <th className="py-4 px-4 text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Eficiência OEE</th>
-                  <th className="py-4 px-4 text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Processo OP</th>
+                  <th className="py-4 px-4 text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">Processo / Linha</th>
                   <th className="py-4 px-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Ação</th>
                 </tr>
               </thead>
@@ -234,12 +307,12 @@ export function Production() {
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <div className={cn(
-                          "w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-[10px] shrink-0 shadow-sm",
+                          "w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-[11px] leading-none tracking-tight text-center shrink-0 shadow-sm",
                           machine.status === 'OPERANDO' ? "bg-status-success" : 
                           machine.status === 'PARADA' ? "bg-status-warning" :
                           machine.status === 'MANUTENCAO' ? "bg-status-danger" : "bg-status-offline"
                         )}>
-                          {machine.codigo}
+                          {getMachineNodeLabel(machine.codigo)}
                         </div>
                         <span className="font-bold text-gray-900 text-sm italic truncate max-w-[180px]" title={machine.nome}>{machine.nome}</span>
                       </div>
@@ -269,9 +342,12 @@ export function Production() {
                       </div>
                     </td>
                     <td className="py-4 px-4">
-                      <div className="flex items-center gap-2">
-                        <FileText className="w-3.5 h-3.5 text-gray-300" />
-                        <span className="text-xs font-mono font-bold text-gray-500">{machine.lastOP}</span>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs font-bold text-gray-700">{machine.processo} ({machine.linha})</span>
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-3.5 h-3.5 text-gray-300" />
+                          <span className="text-xs font-mono font-bold text-gray-500">{machine.lastOP}</span>
+                        </div>
                       </div>
                     </td>
                     <td className="py-4 px-6 text-right">

@@ -37,5 +37,6 @@ Antes de executar qualquer tarefa, identifique qual skill se aplica e carregue o
 
 - [PRD Geral](../PRD/PRD_geral.md) — visão geral, perfis, OPs, design system
 - [PRD Infra](../PRD/PRD_infra.md) — arquitetura, stack, segurança, deploy
+- [PRD Hikrobot](../PRD/PRD_hikrobot.md) — slides de apresentação (SC3000, inspeção à prova de falhas)
 - [Fluxo Geral](../Fluxo_geral.md) — diagrama de sistemas e atores
 - [OP exemplo](../OP.md) — formulário físico que o MES substitui

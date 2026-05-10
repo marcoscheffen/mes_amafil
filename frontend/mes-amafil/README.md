@@ -1,23 +1,19 @@
-# MES Amafil — Frontend
+# MES Amafil — Frontend (Protótipo)
 
-Interface web do Sistema de Execução de Manufatura (MES) para a Amafil. Construída com React + Vite, servida via Express.
-
-## Responsabilidade
-
-Camada de apresentação do MES: acompanhamento de ordens de produção, execução de operações, registro de paradas, solicitações de suporte e relatórios de chão de fábrica.
+Protótipo do frontend do Sistema de Execução de Manufatura para a Amafil. Todas as telas estão implementadas com dados mockados. Stack de produção será Next.js 15 Static Export (ver [PRD Infra](../../PRD/PRD_infra.md)).
 
 ## Ferramentas e versões
 
-| Ferramenta       | Versão  |
-|------------------|---------|
-| Node.js          | 25.x    |
-| React            | 19.x    |
-| TypeScript       | 5.8.x   |
-| Vite             | 6.x     |
-| TailwindCSS      | 4.x     |
-| React Router DOM | 7.x     |
-| Recharts         | 3.x     |
-| @google/genai    | 1.29.x  |
+| Ferramenta | Versão |
+|---|---|
+| Node.js | 25.x |
+| React | 19.x |
+| TypeScript | 5.8.x |
+| Vite | 6.x |
+| TailwindCSS | 4.x |
+| React Router DOM | 7.x |
+| Recharts | 3.x |
+| @google/genai | 1.29.x |
 
 ## Estrutura
 
@@ -45,25 +41,30 @@ src/
 
 ## Rotas
 
-| Rota             | Página                 |
-|------------------|------------------------|
-| `/`              | Dashboard              |
-| `/producao`      | Produção               |
-| `/ops`           | Lista de Ordens        |
-| `/paradas`       | Paradas / Downtime     |
-| `/operacao`      | Execução de Produção   |
-| `/solicitacoes`  | Solicitações de Suporte|
-| `/relatorios`    | Relatórios             |
-| `/usuarios`      | Usuários               |
-| `/mensagens`     | Mensagens              |
-| `/config`        | Configurações          |
+| Rota | Página |
+|---|---|
+| `/` | Dashboard |
+| `/producao` | Produção / Status de Máquinas |
+| `/ops` | Lista de Ordens |
+| `/paradas` | Paradas / Downtime |
+| `/operacao` | Execução de Produção |
+| `/solicitacoes` | Solicitações de Suporte |
+| `/relatorios` | Relatórios |
+| `/usuarios` | Usuários |
+| `/mensagens` | Mensagens |
+| `/config` | Configurações |
+
+## Atualizações recentes
+
+- A página `/producao` foi atualizada para usar uma lista expandida de máquinas e linhas de empacotamento baseada nos documentos `Informações/Maquinas e processos.md` e `Informações/Fluxo_geral.md`.
+- O monitoramento em Produção agora contempla os setores Diversos, Farinha, Polvilho e Massa Tapioca com códigos de máquina no padrão operacional (ex.: `EMP-01A`, `COL-03A`, `ENS-22A-KSP`).
 
 ## Variáveis de ambiente
 
 Copie `.env.example` para `.env.local` e preencha:
 
 ```env
-GEMINI_API_KEY=   # Chave da API Gemini (Google AI)
+GEMINI_API_KEY=   # Chave da API Gemini (Google AI) — usado para OCR de rótulos
 APP_URL=          # URL base da aplicação
 ```
 
@@ -85,9 +86,18 @@ npm run lint
 
 ## Dependências principais
 
-- **Express** — servidor HTTP que injeta a `GEMINI_API_KEY` no backend
-- **@google/genai** — integração com Gemini AI
+- **Express** — servidor HTTP que injeta a `GEMINI_API_KEY` via backend antes de servir o app
+- **@google/genai** — integração com Gemini AI para OCR de lote/validade
 - **Recharts** — gráficos nos painéis e relatórios
 - **Motion** — animações de transição entre páginas
 - **Lucide React** — ícones
 - **date-fns** — formatação de datas
+
+## Próximos passos
+
+Migração para Next.js 15 Static Export com:
+- Supabase Auth (GoTrue) em substituição aos dados mockados
+- Service Worker para operação offline (PWA)
+- shadcn/ui sobre Tailwind CSS
+- Zustand para estado global
+- React Hook Form + Zod para formulários
