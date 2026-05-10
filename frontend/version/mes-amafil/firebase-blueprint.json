@@ -1,0 +1,105 @@
+{
+  "entities": {
+    "empresa": {
+      "title": "Empresa",
+      "description": "Entidade raiz representando uma unidade da Amafil ou empresa parceira.",
+      "type": "object",
+      "properties": {
+        "nome": { "type": "string" },
+        "cnpj": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "configProtheus": {
+          "type": "object",
+          "properties": {
+            "apiUrl": { "type": "string" },
+            "filial": { "type": "string" }
+          }
+        }
+      },
+      "required": ["nome", "cnpj"]
+    },
+    "usuario": {
+      "title": "Usuário",
+      "description": "Usuário do sistema vinculado a uma ou mais empresas.",
+      "type": "object",
+      "properties": {
+        "nome": { "type": "string" },
+        "email": { "type": "string" },
+        "perfil": { "type": "string", "enum": ["MASTER", "ADMIN", "TI", "PCP", "OPERACAO", "MANUTENCAO", "ALMOXARIFADO"] },
+        "empresaId": { "type": "string" },
+        "criadoPor": { "type": "string" },
+        "criadoEm": { "type": "string", "format": "date-time" }
+      },
+      "required": ["nome", "email", "perfil", "empresaId"]
+    },
+    "maquina": {
+      "title": "Máquina",
+      "description": "Equipamento de produção no chão de fábrica.",
+      "type": "object",
+      "properties": {
+        "codigo": { "type": "string" },
+        "nome": { "type": "string" },
+        "tipo": { "type": "string" },
+        "status": { "type": "string", "enum": ["OPERANDO", "PARADA", "MANUTENCAO", "OFFLINE"] },
+        "empresaId": { "type": "string" }
+      },
+      "required": ["codigo", "nome", "empresaId"]
+    },
+    "ordemProducao": {
+      "title": "Ordem de Produção",
+      "description": "Ordem de fabricação importada do Protheus.",
+      "type": "object",
+      "properties": {
+        "numero": { "type": "string" },
+        "produto": { "type": "string" },
+        "produtoCod": { "type": "string" },
+        "qtdPlanejada": { "type": "number" },
+        "unidade": { "type": "string" },
+        "status": { "type": "string", "enum": ["BLOQUEADA", "LIBERADA", "EXECUCAO", "PENDENTE", "FINALIZADA"] },
+        "maquinaId": { "type": "string" },
+        "lote": { "type": "string" },
+        "validade": { "type": "string" },
+        "empresaId": { "type": "string" },
+        "criadoEm": { "type": "string", "format": "date-time" }
+      },
+      "required": ["numero", "produto", "qtdPlanejada", "status", "empresaId"]
+    },
+    "turno": {
+      "title": "Turno de Produção",
+      "description": "Apontamento individual de produção por turno.",
+      "type": "object",
+      "properties": {
+        "opId": { "type": "string" },
+        "operadorId": { "type": "string" },
+        "inicioReal": { "type": "string", "format": "date-time" },
+        "fimReal": { "type": "string", "format": "date-time" },
+        "qtdProduzida": { "type": "number" },
+        "perdaEmbalagem": { "type": "number" },
+        "perdaReembalagem": { "type": "number" },
+        "empresaId": { "type": "string" }
+      },
+      "required": ["opId", "operadorId", "inicioReal", "empresaId"]
+    },
+    "parada": {
+      "title": "Registro de Parada",
+      "description": "Registra interrupções na produção.",
+      "type": "object",
+      "properties": {
+        "opId": { "type": "string" },
+        "motivo": { "type": "string" },
+        "categoria": { "type": "string", "enum": ["MECANICA", "ELETRICA", "MATERIAL", "OPERACIONAL", "PLANEJADA", "QUALIDADE"] },
+        "inicio": { "type": "string", "format": "date-time" },
+        "fim": { "type": "string", "format": "date-time" },
+        "empresaId": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "empresas": { "schema": "empresa", "description": "Coleção de empresas." },
+    "usuarios": { "schema": "usuario", "description": "Coleção de usuários." },
+    "maquinas": { "schema": "maquina", "description": "Coleção de máquinas." },
+    "ordens_producao": { "schema": "ordemProducao", "description": "Coleção de ordens de produção." },
+    "turnos": { "schema": "turno", "description": "Coleção de apontamentos de turnos." },
+    "paradas": { "schema": "parada", "description": "Coleção de paradas registradas." }
+  }
+}

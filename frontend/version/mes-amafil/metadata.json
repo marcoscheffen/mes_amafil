@@ -1,0 +1,6 @@
+{
+  "name": "MES Amafil",
+  "description": "Sistema de Monitoramento e Controle de Processos de Fabricação. Digitaliza ordens de produção, paradas e apontamentos com integração TOTVS Protheus.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
