@@ -1,7 +1,15 @@
-import React, { useState, useRef } from 'react';
-import { MessageSquare, Search, Send, User, Clock, Check, CheckCheck, MoreVertical, Filter, Terminal, ShieldAlert, Wrench, Package, Image as ImageIcon, Camera, X, ChevronLeft } from 'lucide-react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
+import type { LucideIcon } from 'lucide-react';
+import { Search, Send, Check, CheckCheck, MoreVertical, Image as ImageIcon, X, ChevronLeft } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
+import {
+  CHANNEL_ICON_COMPONENTS,
+  GENERAL_CHANNEL_ID,
+  getGeneralChannelMeta,
+  loadPersistedMessageChannels,
+  subscribeMessageChannelsChanged,
+} from '../lib/message-channels';
 
 interface Message {
   id: string;
@@ -21,24 +29,58 @@ const initialMessages: Message[] = [
   { id: '4', sender: 'Lucas - Manutenção', content: 'Peça trocada, máquina em teste por 5 minutos.', timestamp: '15:10', status: 'delivered', group: 'MNT' },
   { id: '5', sender: 'Sistema', content: 'ALERTA: Sensor de temperatura da Estufa 02 atingiu limite superior.', timestamp: '15:15', status: 'delivered', group: 'urgent' },
   { id: '6', sender: 'Roberto Supervisor', content: 'Favor priorizar a OP M01376 de polvilho doce.', timestamp: '15:20', status: 'read', group: 'PCP' },
+  { id: '7', sender: 'Helpdesk - TI', content: 'Janela de manutenção do MES agendada para sábado 02h–04h.', timestamp: '15:22', status: 'read', group: 'TI' },
 ];
 
-const conversations = [
-  { id: 'all', label: 'Geral - Fábrica', icon: Terminal, count: 5, color: 'text-amafil-blue bg-blue-50', description: 'Canal principal de avisos' },
-  { id: 'MNT', label: 'Manutenção (MNT)', icon: Wrench, count: 2, color: 'text-red-500 bg-red-50', description: 'Chamados e alertas técnicos' },
-  { id: 'PCP', label: 'PCP / Produção', icon: Package, count: 0, color: 'text-amafil-green bg-green-50', description: 'Planejamento e ordens' },
-  { id: 'urgent', label: 'Urgentes / Avisos', icon: ShieldAlert, count: 1, color: 'text-orange-500 bg-orange-50', description: 'Alertas críticos de segurança' },
-];
+interface ConversationRow {
+  id: string;
+  label: string;
+  description: string;
+  color: string;
+  icon: LucideIcon;
+  count: number;
+}
 
 export function Messages() {
-  const [activeGroup, setActiveGroup] = useState('all');
+  const [activeGroup, setActiveGroup] = useState(GENERAL_CHANNEL_ID);
+  const [persistedChannels, setPersistedChannels] = useState(loadPersistedMessageChannels);
   const [messages, setMessages] = useState(initialMessages);
   const [newMessage, setNewMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mobileView, setMobileView] = useState<'list' | 'chat'>('list');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const activeConv = conversations.find(c => c.id === activeGroup) || conversations[0];
+  useEffect(() => subscribeMessageChannelsChanged(() => setPersistedChannels(loadPersistedMessageChannels())), []);
+
+  const conversations: ConversationRow[] = useMemo(() => {
+    const gen = getGeneralChannelMeta();
+    return [
+      {
+        id: gen.id,
+        label: gen.label,
+        description: gen.description,
+        color: gen.color,
+        icon: CHANNEL_ICON_COMPONENTS[gen.iconKey],
+        count: messages.length,
+      },
+      ...persistedChannels.map((c) => ({
+        id: c.id,
+        label: c.label,
+        description: c.description,
+        color: c.color,
+        icon: CHANNEL_ICON_COMPONENTS[c.iconKey],
+        count: messages.filter((m) => m.group === c.id).length,
+      })),
+    ];
+  }, [persistedChannels, messages]);
+
+  const activeConv = conversations.find((c) => c.id === activeGroup) ?? conversations[0];
+
+  useEffect(() => {
+    if (activeGroup !== GENERAL_CHANNEL_ID && !persistedChannels.some((c) => c.id === activeGroup)) {
+      setActiveGroup(GENERAL_CHANNEL_ID);
+    }
+  }, [persistedChannels, activeGroup]);
 
   const handleGroupSelect = (id: string) => {
     setActiveGroup(id);
@@ -67,7 +109,7 @@ export function Messages() {
       image: selectedImage || undefined,
       timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
       status: 'sent',
-      group: activeGroup !== 'all' ? activeGroup : undefined,
+      group: activeGroup !== GENERAL_CHANNEL_ID ? activeGroup : undefined,
       isMe: true
     };
 
@@ -76,10 +118,12 @@ export function Messages() {
     setSelectedImage(null);
   };
 
-  const filteredMessages = messages.filter(m => {
-    if (activeGroup === 'all') return true;
-    return m.group === activeGroup || (m.isMe && !m.group); // Simplified logic for demo
+  const filteredMessages = messages.filter((m) => {
+    if (activeGroup === GENERAL_CHANNEL_ID) return true;
+    return m.group === activeGroup || (m.isMe && !m.group);
   });
+
+  const ChatHeaderIcon = activeConv.icon;
 
   return (
     <div className={cn(
@@ -88,8 +132,8 @@ export function Messages() {
     )}>
       {/* Sidebar: Conversations */}
       <div className={cn(
-        "w-full lg:w-80 flex flex-col gap-4 transition-all duration-300",
-        mobileView === 'chat' ? "hidden lg:flex" : "flex h-full"
+        "w-full lg:w-80 flex flex-col gap-4 transition-all duration-300 min-h-0",
+        mobileView === 'chat' ? "hidden lg:flex" : "flex h-full min-h-0"
       )}>
         <div className="card-mes p-4 shrink-0 shadow-sm">
           <div className="relative">
@@ -102,41 +146,50 @@ export function Messages() {
           </div>
         </div>
 
-        <div className="card-mes flex-1 p-2 space-y-1 overflow-y-auto shadow-sm">
-          <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-3 py-2 mb-1">Canais de Comunicação</h3>
-          {conversations.map((conv) => (
-            <button
-              key={conv.id}
-              onClick={() => handleGroupSelect(conv.id)}
-              className={cn(
-                "w-full flex items-center gap-3 p-3 rounded-2xl transition-all group",
-                activeGroup === conv.id 
-                  ? "bg-amafil-blue text-white shadow-md shadow-amafil-blue/20" 
-                  : "text-gray-600 hover:bg-gray-50"
-              )}
-            >
-              <div className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center transition-colors",
-                activeGroup === conv.id ? "bg-white/20 text-white" : conv.color
-              )}>
-                <conv.icon className="w-5 h-5" />
-              </div>
-              <div className="flex-1 text-left">
-                <p className={cn("text-xs font-black uppercase tracking-tight", activeGroup === conv.id ? "text-white" : "text-gray-900")}>
-                  {conv.label}
-                </p>
-                <p className={cn("text-[9px] font-bold truncate", activeGroup === conv.id ? "text-white/80" : "text-gray-400")}>
-                  Última mensagem às 15:10
-                </p>
-              </div>
-              {conv.count > 0 && activeGroup !== conv.id && (
-                <span className="bg-amafil-red text-white text-[8px] font-black px-2 py-1 rounded-full">{conv.count}</span>
-              )}
-            </button>
-          ))}
+        <div className="card-mes flex-1 flex flex-col min-h-0 p-0 shadow-sm overflow-hidden">
+          <div className="shrink-0 px-3 pt-3 pb-2">
+            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Canais de Comunicação</h3>
+          </div>
+          <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-1 px-2 pb-2">
+            {conversations.map((conv) => {
+              const ConvIcon = conv.icon;
+              return (
+              <button
+                key={conv.id}
+                onClick={() => handleGroupSelect(conv.id)}
+                className={cn(
+                  "w-full flex items-center gap-3 p-3 rounded-2xl transition-all group",
+                  activeGroup === conv.id 
+                    ? "bg-amafil-blue text-white shadow-md shadow-amafil-blue/20" 
+                    : "text-gray-600 hover:bg-gray-50"
+                )}
+              >
+                <div className={cn(
+                  "w-10 h-10 rounded-xl flex items-center justify-center transition-colors shrink-0",
+                  activeGroup === conv.id ? "bg-white/20 text-white" : conv.color
+                )}>
+                  <ConvIcon className="w-5 h-5" />
+                </div>
+                <div className="flex-1 text-left min-w-0">
+                  <p className={cn("text-xs font-black uppercase tracking-tight", activeGroup === conv.id ? "text-white" : "text-gray-900")}>
+                    {conv.label}
+                  </p>
+                  <p className={cn("text-[9px] font-bold truncate", activeGroup === conv.id ? "text-white/80" : "text-gray-400")}>
+                    Última mensagem às 15:10
+                  </p>
+                </div>
+                {conv.count > 0 && activeGroup !== conv.id && (
+                  <span className="bg-amafil-red text-white text-[8px] font-black px-2 py-1 rounded-full shrink-0">{conv.count}</span>
+                )}
+              </button>
+            );
+            })}
+          </div>
 
-          <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-3 py-2 mt-4 mb-1">Operadores Ativos</h3>
-          <div className="space-y-1 px-1 max-h-[180px] sm:max-h-none overflow-y-auto custom-scrollbar pb-4 sm:pb-0">
+          <div className="shrink-0 px-3 pt-3 pb-2 border-t border-gray-100 bg-gray-50/40">
+            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Operadores Ativos</h3>
+          </div>
+          <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar space-y-1 px-2 pb-3">
              {['Lucas Manutenção', 'Roberto Sup.', 'João Empacot.', 'Ana Lab.', 'Carlos Mnt.', 'Mariana Pcp.', 'Ricardo Mnt.', 'Fabiana QLD'].map(user => (
                <button key={user} className="w-full flex items-center gap-3 p-2 hover:bg-gray-50 rounded-xl transition-all group">
                  <div className="relative shrink-0">
@@ -173,7 +226,7 @@ export function Messages() {
                "w-10 h-10 lg:w-12 lg:h-12 rounded-2xl flex items-center justify-center transition-all duration-500",
                activeConv.color
              )}>
-               <activeConv.icon className="w-6 h-6" />
+               <ChatHeaderIcon className="w-6 h-6" />
              </div>
              <div>
                <h2 className="text-lg lg:text-xl font-black text-gray-900 italic tracking-tighter leading-none mb-1">{activeConv.label}</h2>

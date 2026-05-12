@@ -1,20 +1,23 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# MES Amafil — Versão AI Studio (Experimental)
 
-# Run and deploy your AI Studio app
+Versão experimental gerada via Google AI Studio. Serve como referência de protótipo alternativo; a versão oficial do frontend está em [`frontend/mes-amafil/`](../../mes-amafil/README.md).
 
-This contains everything you need to run your app locally.
+## Ferramentas e versões
 
-View your app in AI Studio: https://ai.studio/apps/49002092-22da-4124-86ef-61343f1cd8d7
+| Ferramenta | Versão |
+|---|---|
+| Node.js | 22 LTS |
+| Vite | — |
+| TypeScript | — |
 
-## Run Locally
+## Como executar
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+# Definir GEMINI_API_KEY em .env.local
+npm run dev
+```
 
+## Observação
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Este diretório não é mantido ativamente. Alterações de funcionalidade devem ir para `frontend/mes-amafil/`.

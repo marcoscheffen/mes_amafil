@@ -1,14 +1,106 @@
-import React, { useState } from 'react';
-import { Settings as SettingsIcon, Bell, Database, Monitor, Shield, Zap, Save, RefreshCw, Cpu, Globe, Server } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  Bell,
+  Database,
+  Monitor,
+  Shield,
+  Zap,
+  Save,
+  RefreshCw,
+  Cpu,
+  Globe,
+  Server,
+  MessageSquare,
+  Plus,
+  Pencil,
+  Trash2,
+} from 'lucide-react';
 import { cn } from '../lib/utils';
+import {
+  type PersistedMessageChannel,
+  CHANNEL_COLOR_PRESETS,
+  CHANNEL_ICON_COMPONENTS,
+  CHANNEL_ICON_KEYS,
+  loadPersistedMessageChannels,
+  savePersistedMessageChannels,
+  subscribeMessageChannelsChanged,
+  slugChannelId,
+} from '../lib/message-channels';
 
 export function Settings() {
-  const [activeTab, setActiveTab] = useState<'geral' | 'producao' | 'notificacoes' | 'integracao'>('geral');
+  const [activeTab, setActiveTab] = useState<'geral' | 'producao' | 'notificacoes' | 'mensagens' | 'integracao'>('geral');
+  const [messageChannels, setMessageChannels] = useState<PersistedMessageChannel[]>(() => loadPersistedMessageChannels());
+  const [channelModal, setChannelModal] = useState<null | { mode: 'new' } | { mode: 'edit'; channel: PersistedMessageChannel }>(
+    null
+  );
+  const [channelDraft, setChannelDraft] = useState<PersistedMessageChannel | null>(null);
+
+  useEffect(() => subscribeMessageChannelsChanged(() => setMessageChannels(loadPersistedMessageChannels())), []);
+
+  const openNewChannel = () => {
+      setChannelModal({ mode: 'new' });
+      setChannelDraft({
+        id: '',
+        label: '',
+        description: '',
+        iconKey: 'message-square',
+        color: CHANNEL_COLOR_PRESETS[0].value,
+      });
+    };
+
+  const openEditChannel = (channel: PersistedMessageChannel) => {
+    setChannelModal({ mode: 'edit', channel });
+    setChannelDraft({ ...channel });
+  };
+
+  const closeChannelModal = () => {
+    setChannelModal(null);
+    setChannelDraft(null);
+  };
+
+  const handleSaveChannel = () => {
+    if (!channelDraft || !channelModal) return;
+    if (!channelDraft.label.trim()) {
+      alert('Informe o nome do canal.');
+      return;
+    }
+    const next = [...messageChannels];
+    if (channelModal.mode === 'new') {
+      const ids = new Set(next.map((c) => c.id));
+      const id = slugChannelId(channelDraft.label, ids);
+      next.push({
+        ...channelDraft,
+        id,
+        label: channelDraft.label.trim(),
+        description: channelDraft.description.trim(),
+      });
+    } else {
+      const idx = next.findIndex((c) => c.id === channelModal.channel.id);
+      if (idx === -1) return;
+      next[idx] = {
+        ...channelDraft,
+        id: channelModal.channel.id,
+        label: channelDraft.label.trim(),
+        description: channelDraft.description.trim(),
+      };
+    }
+    savePersistedMessageChannels(next);
+    setMessageChannels(next);
+    closeChannelModal();
+  };
+
+  const handleDeleteChannel = (channel: PersistedMessageChannel) => {
+    if (!confirm(`Excluir o canal "${channel.label}"?`)) return;
+    const next = messageChannels.filter((c) => c.id !== channel.id);
+    savePersistedMessageChannels(next);
+    setMessageChannels(next);
+  };
 
   const tabs = [
     { id: 'geral', label: 'Geral', icon: Monitor },
     { id: 'producao', label: 'Produção', icon: Zap },
     { id: 'notificacoes', label: 'Notificações', icon: Bell },
+    { id: 'mensagens', label: 'Mensagens', icon: MessageSquare },
     { id: 'integracao', label: 'Sistema & API', icon: Database },
   ] as const;
 
@@ -168,6 +260,176 @@ export function Settings() {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {activeTab === 'mensagens' && (
+            <div className="space-y-6">
+              <div className="card-mes shadow-sm space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-100 pb-4">
+                  <div>
+                    <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest italic flex items-center gap-2">
+                      <MessageSquare className="w-5 h-5 text-amafil-blue" />
+                      Canais de comunicação
+                    </h3>
+                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tight mt-2 max-w-xl">
+                      Crie, edite ou exclua canais do módulo Mensagens. O canal <span className="text-gray-800">Geral — Fábrica</span> é
+                      fixo e agrega todas as conversas.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={openNewChannel}
+                    className="shrink-0 flex items-center justify-center gap-2 rounded-full bg-amafil-blue text-white px-6 py-2.5 text-[10px] font-black uppercase tracking-widest shadow-md shadow-amafil-blue/20 hover:bg-amafil-blue/90 transition-all"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Novo canal
+                  </button>
+                </div>
+
+                <div className="divide-y divide-gray-100">
+                  {messageChannels.length === 0 ? (
+                    <p className="text-xs font-bold text-gray-400 py-8 text-center italic">Nenhum canal configurado.</p>
+                  ) : (
+                    messageChannels.map((ch) => {
+                      const Icon = CHANNEL_ICON_COMPONENTS[ch.iconKey];
+                      return (
+                        <div key={ch.id} className="py-4 flex flex-col sm:flex-row sm:items-center gap-4">
+                          <div className="flex items-center gap-4 flex-1 min-w-0">
+                            <div className={cn('w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border border-current/10', ch.color)}>
+                              <Icon className="w-6 h-6" />
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-sm font-black text-gray-900 uppercase tracking-tight truncate">{ch.label}</p>
+                              <p className="text-[10px] font-bold text-gray-400 truncate">
+                                ID: <span className="font-mono text-gray-600">{ch.id}</span>
+                              </p>
+                              <p className="text-xs font-bold text-gray-500 mt-1 line-clamp-2">{ch.description}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 sm:shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => openEditChannel(ch)}
+                              className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-xl border border-bento-border bg-white px-4 py-2 text-[10px] font-black uppercase tracking-widest text-gray-600 hover:bg-gray-50 transition-all"
+                            >
+                              <Pencil className="w-3.5 h-3.5" />
+                              Editar
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteChannel(ch)}
+                              className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-xl border border-red-100 bg-red-50 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-red-700 hover:bg-red-100 transition-all"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              Excluir
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+
+              {channelModal && channelDraft && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+                  <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in duration-200">
+                    <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                      <h3 className="text-lg font-black text-gray-900 italic tracking-tight">
+                        {channelModal.mode === 'new' ? 'Novo canal' : 'Editar canal'}
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={closeChannelModal}
+                        className="text-gray-400 hover:text-gray-700 font-black text-xl leading-none px-1"
+                        aria-label="Fechar"
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <div className="p-6 space-y-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nome do canal</label>
+                        <input
+                          type="text"
+                          value={channelDraft.label}
+                          onChange={(e) => setChannelDraft({ ...channelDraft, label: e.target.value })}
+                          className="w-full bg-gray-50 border border-bento-border rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:ring-2 focus:ring-amafil-blue/10"
+                          placeholder="Ex.: TI"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Descrição</label>
+                        <textarea
+                          value={channelDraft.description}
+                          onChange={(e) => setChannelDraft({ ...channelDraft, description: e.target.value })}
+                          className="w-full bg-gray-50 border border-bento-border rounded-xl px-4 py-2.5 text-sm font-bold min-h-[72px] resize-none outline-none focus:ring-2 focus:ring-amafil-blue/10"
+                          placeholder="Aparece no cabeçalho do chat..."
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Ícone</label>
+                          <select
+                            value={channelDraft.iconKey}
+                            onChange={(e) =>
+                              setChannelDraft({
+                                ...channelDraft,
+                                iconKey: e.target.value as PersistedMessageChannel['iconKey'],
+                              })
+                            }
+                            className="w-full bg-gray-50 border border-bento-border rounded-xl px-3 py-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-amafil-blue/10"
+                          >
+                            {CHANNEL_ICON_KEYS.map((key) => (
+                              <option key={key} value={key}>
+                                {key}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Cor</label>
+                          <select
+                            value={channelDraft.color}
+                            onChange={(e) => setChannelDraft({ ...channelDraft, color: e.target.value })}
+                            className="w-full bg-gray-50 border border-bento-border rounded-xl px-3 py-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-amafil-blue/10"
+                          >
+                            {CHANNEL_COLOR_PRESETS.map((p) => (
+                              <option key={p.value} value={p.value}>
+                                {p.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      {channelModal.mode === 'edit' && (
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">
+                          Identificador interno:{' '}
+                          <span className="font-mono text-gray-700">{channelModal.channel.id}</span> (usado nas mensagens já
+                          enviadas)
+                        </p>
+                      )}
+                      <div className="flex gap-3 pt-2">
+                        <button
+                          type="button"
+                          onClick={closeChannelModal}
+                          className="flex-1 py-3 rounded-2xl bg-gray-50 text-gray-600 text-xs font-black uppercase tracking-widest hover:bg-gray-100 transition-all border border-transparent"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleSaveChannel}
+                          className="flex-1 py-3 rounded-2xl bg-amafil-blue text-white text-xs font-black uppercase tracking-widest shadow-md hover:bg-amafil-blue/90 transition-all"
+                        >
+                          Salvar canal
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

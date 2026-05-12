@@ -20,8 +20,8 @@ Protótipo do frontend do Sistema de Execução de Manufatura para a Amafil. Tod
 ```
 src/
 ├── components/
-│   ├── layout/        # Header, Sidebar, KPICard
-│   └── dashboard/     # Componentes do painel principal
+│   ├── layout/        # Header, Sidebar
+│   └── dashboard/     # KPICard e demais componentes do painel
 ├── pages/             # Uma página por rota
 │   ├── Dashboard.tsx
 │   ├── Production.tsx
@@ -34,7 +34,8 @@ src/
 │   ├── Messages.tsx
 │   └── Settings.tsx
 ├── lib/
-│   └── utils.ts
+│   ├── utils.ts
+│   └── message-channels.ts   # canais do módulo Mensagens (localStorage + defaults)
 ├── types.ts
 └── App.tsx
 ```
@@ -63,12 +64,16 @@ O app é uma SPA (React Router). Para o menu e URLs diretas funcionarem em produ
 
 Após alterações relevantes ao roteamento ou ao deploy, mantenha esta seção alinhada ao que está no repositório.
 
-## Atualizações recentes
+## Funcionalidades implementadas
 
-- Em `ProductionExecution`, o botão **Solicitar Reforço** agora abre o menu de **Ações Rápidas** e, na sequência, exibe formulário modal no mesmo padrão de `SupportRequests` (MNT, ALM e PCP).
-- Navegação do menu lateral ajustada para SPA na Vercel: `NavLink` + `vercel.json` com rewrite para `index.html`.
-- A página `/producao` foi atualizada para usar uma lista expandida de máquinas e linhas de empacotamento baseada nos documentos `Informações/Maquinas e processos.md` e `Informações/Fluxo_geral.md`.
-- O monitoramento em Produção agora contempla os setores Diversos, Farinha, Polvilho e Massa Tapioca com códigos de máquina no padrão operacional (ex.: `EMP-01A`, `COL-03A`, `ENS-22A-KSP`).
+- **Dashboard** — KPIs de turno em tempo real com gráficos (Recharts)
+- **Produção** — monitoramento de 35 máquinas nos setores Diversos, Farinha, Polvilho e Massa Tapioca; códigos no padrão operacional (`EMP-01A`, `COL-03A`, `ENS-22A-KSP`)
+- **Execução de OP** — início, paradas e finalização de turno; botão **Solicitar Reforço** abre menu de Ações Rápidas (MNT, ALM, PCP) com formulário modal
+- **Ordens / Paradas / Solicitações** — listas filtráveis com dados mockados
+- **Relatórios** — gráficos agregados por turno e período
+- **Mensagens** — canais internos (Geral fixo + canais persistidos: Manutenção, PCP, Avisos, TI, etc.); edição em **Configurações → Mensagens**
+- **Usuários / Configurações** — gestão básica de perfis; aba **Mensagens** para criar, editar e excluir canais de comunicação (protótipo: `localStorage`)
+- **SPA na Vercel** — `NavLink` no menu lateral + `vercel.json` com rewrite para `index.html`
 
 ## Variáveis de ambiente
 

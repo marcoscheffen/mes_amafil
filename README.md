@@ -20,12 +20,13 @@ MES/
 ├── Apresentação/
 │   └── mes-amafil-presentation/  # App de apresentação/pitch do sistema (React + Vite)
 ├── frontend/
-│   └── mes-amafil/        # Protótipo do frontend MES (React 19 + Vite 6)
+│   ├── mes-amafil/        # Protótipo do frontend MES (React 19 + Vite 6)
+│   └── version/           # Versões anteriores e snapshots do frontend
+├── github/                # README e materiais para o repositório GitHub
 ├── Imagens/               # Screenshots de telas e referências visuais
-├── Informações/           # Documentos de máquinas e processos (xlsx, pdf)
+├── Informações/           # Documentos de máquinas, processos e fluxos (xlsx, pdf, md)
+├── MES (pesquisa)/        # Pesquisas e referências sobre sistemas MES
 ├── PRD/                   # Documentos de requisitos do produto
-├── Referências/
-│   └── frontend/          # Projeto de referência de design (Ayvi)
 ├── CLAUDE.md              # Instruções para o agente de IA
 ├── Fluxo_geral.md         # Diagrama de sistemas e atores (Mermaid)
 └── OP.md                  # Formulário físico de OP que o MES substitui
@@ -68,13 +69,18 @@ MES/
 
 | Documento | Descrição |
 |---|---|
-| [PRD Geral](PRD/PRD_geral.md) | Regras de negócio, perfis, OPs, apontamentos, design system |
+| [PRD Geral](PRD/PRD_geral.md) | Regras de negócio, perfis, OPs, apontamentos |
+| [PRD Base](PRD/PRD_base.md) | Fundamentos e escopo do sistema |
 | [PRD Infra](PRD/PRD_infra.md) | Arquitetura, stack, segurança, deploy, Docker |
+| [PRD Design](PRD/PRD_design.md) | Guia de design e UX |
+| [PRD Design System](PRD/PRD_design_system.md) | Tokens, cores, componentes UI |
 | [PRD Apresentação](PRD/PRD_apresentação.md) | Roteiro e slides do pitch do sistema |
+| [PRD Apresentação MI](PRD/PRD_apresentação_MI.md) | Variante da apresentação (Manufatura Industrial) |
 | [PRD Hikrobot](PRD/PRD_hikrobot.md) | Integração com câmeras Hikrobot (inspeção visual) |
 | [PRD DATEC](PRD/PRD_datec.md) | Integração com DATEC |
-| [Fluxo Geral](Fluxo_geral.md) | Diagrama de sistemas e atores |
+| [Fluxo Geral](Fluxo_geral.md) | Diagrama de sistemas e atores (Mermaid) |
 | [OP Exemplo](OP.md) | Formulário físico substituído pelo MES |
 | [Frontend README](frontend/mes-amafil/README.md) | Como rodar o protótipo do frontend |
 | [Apresentação README](Apresentação/mes-amafil-presentation/README.md) | Como rodar o app de apresentação |
+| [GitHub README](github/README.md) | README público do repositório |
 | [Skills do agente](.agents/README.md) | Skills disponíveis para automação com IA |
