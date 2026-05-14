@@ -15,11 +15,14 @@ App de apresentação/pitch do Sistema MES para a Amafil. Slides interativos cob
 
 ## Conteúdo da apresentação
 
+**Ordem dos slides:** após a capa vêm o slide institucional da [Soma Solution](https://www.somasolution.com.br/) (marcas e presença nacional), depois Markem-Imaje, CoLOS, Datec, Hikrobot, pitch do MES e conclusão.
+
 - Problema atual (formulários físicos de OP)
 - Solução proposta (MES digital + integração Protheus)
 - Módulos do sistema (Dashboard, OPs, Execução, Paradas, Solicitações, Mensagens)
 - Integração com Hikrobot (câmeras SC3000 para inspeção visual)
 - Stack tecnológico e arquitetura
+- Slide de linha de embalagem: gateway central (embaladora, dosagem, balança, enfardadeira; opcional OCR/leitura de código via Hikrobot SC3000), saídas para banco/MES e IO (torre de alarme, intertravamento), lógica de perdas e confirmação por fardo
 - Próximos passos e roadmap
 
 ## Como executar

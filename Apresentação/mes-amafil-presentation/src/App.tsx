@@ -21,7 +21,12 @@ import {
   ScanLine,
   Focus,
   ScanBarcode,
-  FileText
+  FileText,
+  Scale,
+  Droplets,
+  Bell,
+  Lock,
+  ExternalLink
 } from 'lucide-react';
 
 const COLORS = {
@@ -105,6 +110,161 @@ const CoverSlide = () => (
     </motion.div>
   </div>
 );
+
+const SOMA_URL = 'https://www.somasolution.com.br/';
+const SOMA_LOGO_URL =
+  'https://c5gwmsmjx1.execute-api.us-east-1.amazonaws.com/prod/dados_processo_seletivo/logo_empresa/47661/logo_somasolution_PNG.png_name_20220608-14663-74io6.png';
+
+/** Cores alinhadas à identidade visual do site somasolution.com.br */
+const SOMA_NAVY = '#003355';
+const SOMA_ORANGE = '#FF7700';
+
+const SomaSolutionSlide = () => {
+  const brands = [
+    'Markem-Imaje',
+    'Datec',
+    'Retreeva',
+    'Balluff',
+    'Soma Inspection Solution',
+    'Hikrobot'
+  ];
+
+  const pillars = [
+    'Codificação industrial',
+    'Visão e leitura de códigos',
+    'Automação industrial',
+    'Inspeção e pesagem'
+  ];
+
+  const stats = [
+    { value: '25+', label: 'anos de mercado' },
+    { value: '7', label: 'unidades de negócio' },
+    { value: '5', label: 'estados (Brasil)' }
+  ];
+
+  return (
+    <div className="flex flex-col h-full pb-28 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white">
+      {/* Hero — referência: destaque de marca no site */}
+      <div
+        className="shrink-0 px-8 pt-8 pb-6 text-center border-b border-slate-200/80"
+        style={{
+          background: `linear-gradient(180deg, rgba(0,51,85,0.06) 0%, rgba(255,255,255,0.92) 100%)`
+        }}
+      >
+        <div
+          className="mx-auto mb-5 h-1 w-20 rounded-full"
+          style={{ background: `linear-gradient(90deg, ${SOMA_NAVY}, ${SOMA_ORANGE})` }}
+        />
+        <motion.img
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          src={SOMA_LOGO_URL}
+          alt="Soma Solution"
+          className="mx-auto h-[5.5rem] sm:h-32 md:h-36 lg:h-40 w-auto max-w-[min(100%,440px)] object-contain drop-shadow-sm"
+          referrerPolicy="no-referrer"
+        />
+        <p
+          className="mt-5 text-[11px] font-bold uppercase tracking-[0.2em]"
+          style={{ color: SOMA_NAVY }}
+        >
+          Distribuidor e integrador
+        </p>
+        <p className="mt-2 text-sm text-slate-600 max-w-2xl mx-auto leading-snug">
+          Soluções completas em equipamentos para{' '}
+          <span className="font-semibold text-slate-800">codificação, visão, automação e inspeção</span> — alinhado ao portfólio{' '}
+          <a
+            href={SOMA_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold underline-offset-2 hover:underline"
+            style={{ color: SOMA_ORANGE }}
+          >
+            somasolution.com.br
+          </a>
+        </p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+          {pillars.map((p, i) => (
+            <span
+              key={p}
+              className="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-white/90 border border-slate-200 text-slate-600 shadow-sm"
+            >
+              {p}
+            </span>
+          ))}
+        </div>
+        <a
+          href={SOMA_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:brightness-110 hover:shadow-lg"
+          style={{ backgroundColor: SOMA_ORANGE }}
+        >
+          <ExternalLink size={16} />
+          Visite o site
+        </a>
+      </div>
+
+      <div className="flex-grow min-h-0 px-8 pt-6 flex flex-col lg:flex-row gap-6 lg:gap-8">
+        <div className="flex-1 min-w-0 flex flex-col gap-4 overflow-y-auto">
+          <div className="grid grid-cols-3 gap-2 shrink-0">
+            {stats.map((s) => (
+              <div
+                key={s.label}
+                className="rounded-xl border border-slate-100 bg-white px-3 py-3 text-center shadow-sm"
+              >
+                <div className="text-lg font-black tabular-nums" style={{ color: SOMA_ORANGE }}>
+                  {s.value}
+                </div>
+                <div className="text-[9px] font-bold uppercase tracking-wide text-slate-500 leading-tight mt-0.5">
+                  {s.label}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div
+            className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm space-y-3.5"
+            style={{ boxShadow: '0 1px 0 0 rgba(0,51,85,0.04)' }}
+          >
+            <p className="text-sm text-slate-600 leading-relaxed">
+              A <strong style={{ color: SOMA_NAVY }}>Soma Solution</strong> possui experiência consolidada no mercado de equipamentos
+              industriais, fornecendo soluções em codificação industrial, inspeção de produtos, embalagem e automação industrial.
+            </p>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              A empresa oferece equipamentos de alta tecnologia, reconhecidos em âmbito nacional e internacional, com agilidade e
+              transparência nas relações com clientes.
+            </p>
+          </div>
+        </div>
+
+        <div className="lg:w-[360px] shrink-0 flex flex-col min-h-0">
+          <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm flex flex-col h-full min-h-0">
+            <h4
+              className="text-[13px] font-black uppercase tracking-wide mb-4 pb-3 border-b border-slate-100 text-center lg:text-left"
+              style={{ color: SOMA_NAVY }}
+            >
+              As melhores marcas do mercado
+            </h4>
+            <div className="flex flex-wrap gap-2 justify-center lg:justify-start content-start overflow-y-auto">
+              {brands.map((brand, i) => (
+                <motion.span
+                  key={brand}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.04 * i }}
+                  className="px-3 py-2 rounded-lg text-[11px] font-bold border bg-slate-50/80 text-slate-700 transition hover:border-slate-300"
+                  style={{ borderColor: `${SOMA_NAVY}20` }}
+                >
+                  {brand}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ProblemSlide = () => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center h-full p-12">
@@ -275,77 +435,86 @@ const SolutionSlide = () => (
 );
 
 const DashboardMockup = () => (
-  <div className="flex flex-col h-full p-8 bg-[#F5F6FA]">
-    <div className="flex items-center justify-between mb-6">
-      <div className="flex items-center gap-2">
-        <Activity className="text-[#00AA4D]" />
-        <h2 className="text-2xl font-bold text-gray-800">Runtime.<span className="text-[#00AA4D]">Dashboard</span></h2>
+  <div className="flex flex-col h-full min-h-0 p-8 pt-6 pb-28 bg-[#F5F6FA] overflow-hidden">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3 shrink-0">
+      <div className="flex items-center gap-2 min-w-0">
+        <Activity className="text-[#00AA4D] shrink-0" size={22} />
+        <h2 className="text-lg sm:text-2xl font-bold text-gray-800 truncate">
+          Runtime.<span className="text-[#00AA4D]">Dashboard</span>
+        </h2>
       </div>
-      <div className="flex gap-2">
-        <div className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full uppercase">OP: M01376-Active</div>
-        <button className="px-4 py-1 bg-[#00AA4D] text-white text-xs font-bold rounded-lg">EXPORTAR DADOS</button>
+      <div className="flex flex-wrap items-center gap-2 shrink-0">
+        <div className="px-2.5 py-1 bg-green-100 text-green-700 text-[10px] sm:text-xs font-bold rounded-full uppercase">
+          OP: M01376-Active
+        </div>
+        <button
+          type="button"
+          className="px-3 py-1 bg-[#00AA4D] text-white text-[10px] sm:text-xs font-bold rounded-lg"
+        >
+          EXPORTAR DADOS
+        </button>
       </div>
     </div>
-    
-    <div className="grid grid-cols-4 gap-4 mb-6">
+
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-3 shrink-0">
       {[
         { label: "OEE GLOBAL", val: "84.2%", status: "NORMAL", trend: "+2.4%", trendLabel: "ÍNDICE DE PERFORMANCE" },
         { label: "DISPONIBILIDADE", val: "91.5%", status: "INSTÁVEL", trend: "-1.2%", trendLabel: "TAXA DE OPERAÇÃO", warning: true },
         { label: "PERFORMANCE", val: "94.8%", status: "NORMAL", trend: "+0.5%", trendLabel: "RENDIMENTO" },
         { label: "QUALIDADE", val: "98.2%", status: "NORMAL", trend: "+0.1%", trendLabel: "TAXA DE QUALIDADE" }
       ].map((card, i) => (
-        <div key={i} className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <p className="text-[10px] font-bold text-gray-400 uppercase">{card.label}</p>
-              <p className="text-[10px] text-gray-400">Métricas</p>
+        <div key={i} className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200 shadow-sm min-w-0">
+          <div className="flex justify-between items-start gap-1 mb-2 sm:mb-3">
+            <div className="min-w-0">
+              <p className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase leading-tight">{card.label}</p>
+              <p className="text-[9px] text-gray-400">Métricas</p>
             </div>
-            <span className={`text-[9px] font-bold px-2 py-0.5 rounded ${card.warning ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}`}>
+            <span className={`text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${card.warning ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}`}>
               {card.status}
             </span>
           </div>
-          <div className="text-3xl font-bold text-gray-800 mb-4">{card.val}</div>
-          <div className={`text-[10px] font-bold flex items-center gap-1 ${card.trend.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+          <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2 sm:mb-3">{card.val}</div>
+          <div className={`text-[9px] sm:text-[10px] font-bold flex flex-wrap items-center gap-x-1 ${card.trend.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
             <span>{card.trend.startsWith('+') ? '▲' : '▼'} {card.trend}</span>
-            <span className="text-gray-400 uppercase ml-1">{card.trendLabel}</span>
+            <span className="text-gray-400 uppercase">{card.trendLabel}</span>
           </div>
         </div>
       ))}
     </div>
-    
-    <div className="grid grid-cols-3 gap-4 flex-grow">
-      <div className="col-span-2 bg-white rounded-xl border border-gray-200 p-6 flex flex-col">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-lg font-bold text-gray-800">Eficiência de Produção</h3>
-          <div className="text-right">
-            <span className="text-2xl font-bold text-[#00AA4D]">12.4ms</span>
-            <p className="text-[10px] text-gray-400 uppercase">Latência Média</p>
+
+    <div className="flex-1 min-h-0 min-w-0 grid grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-4">
+      <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-4 sm:p-5 flex flex-col min-h-0">
+        <div className="flex justify-between items-start gap-2 mb-3 shrink-0">
+          <h3 className="text-base sm:text-lg font-bold text-gray-800">Eficiência de Produção</h3>
+          <div className="text-right shrink-0">
+            <span className="text-xl sm:text-2xl font-bold text-[#00AA4D]">12.4ms</span>
+            <p className="text-[9px] text-gray-400 uppercase">Latência Média</p>
           </div>
         </div>
-        <div className="flex-grow flex items-end gap-1 px-2 pb-2">
+        <div className="flex-1 min-h-[100px] flex items-end gap-0.5 sm:gap-1 px-1 sm:px-2 pb-2">
           {Array.from({ length: 24 }).map((_, i) => (
-            <motion.div 
+            <motion.div
               key={i}
               initial={{ height: 0 }}
               animate={{ height: `${40 + Math.sin(i * 0.5) * 30 + Math.random() * 20}%` }}
               transition={{ delay: i * 0.02, duration: 1 }}
-              className="flex-grow bg-[#00AA4D]/10 rounded-t-sm relative group"
+              className="flex-1 min-w-0 bg-[#00AA4D]/10 rounded-t-sm relative group"
             >
-              <div className="absolute top-0 left-0 w-full h-1 bg-[#00AA4D] opacity-40"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-[#00AA4D] opacity-40" />
             </motion.div>
           ))}
         </div>
-        <div className="flex justify-between mt-2 px-2 text-[10px] text-gray-400 font-mono">
+        <div className="flex justify-between mt-1 sm:mt-2 px-1 sm:px-2 text-[9px] sm:text-[10px] text-gray-400 font-mono shrink-0">
           <span>06:00</span>
           <span>10:00</span>
           <span>14:00</span>
           <span>18:00</span>
         </div>
       </div>
-      
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-sm font-bold text-gray-400 uppercase mb-6">Categorias de Erro</h3>
-        <div className="space-y-6">
+
+      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 flex flex-col min-h-0 lg:min-h-0 overflow-y-auto">
+        <h3 className="text-xs sm:text-sm font-bold text-gray-400 uppercase mb-3 shrink-0">Categorias de Erro</h3>
+        <div className="space-y-3 sm:space-y-4">
           {[
             { label: "Mecânica", val: 80, color: "bg-red-500", time: "45m" },
             { label: "Elétrica", val: 40, color: "bg-amber-500", time: "30m" },
@@ -353,18 +522,18 @@ const DashboardMockup = () => (
             { label: "Operação", val: 30, color: "bg-violet-500", time: "25m" },
             { label: "Planejada", val: 90, color: "bg-green-500", time: "60m" }
           ].map((bar, i) => (
-            <div key={i} className="space-y-2">
-              <div className="flex justify-between text-[11px] font-bold">
-                <span className="text-gray-600">{bar.label}</span>
-                <span className="text-gray-900">{bar.time}</span>
+            <div key={i} className="space-y-1.5">
+              <div className="flex justify-between text-[10px] sm:text-[11px] font-bold gap-2">
+                <span className="text-gray-600 truncate">{bar.label}</span>
+                <span className="text-gray-900 shrink-0">{bar.time}</span>
               </div>
               <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                <motion.div 
+                <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${bar.val}%` }}
                   transition={{ delay: 0.5 + i * 0.1, duration: 0.8 }}
                   className={`h-full ${bar.color}`}
-                ></motion.div>
+                />
               </div>
             </div>
           ))}
@@ -464,7 +633,7 @@ const FeaturesSlide = () => (
     
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
       {[
-        { title: "Manutenção", icon: <Wrench />, desc: "Chamados técnicos via tablet na linha." },
+        { title: "Manutenção", icon: <Wrench />, desc: "Chamados técnicos via tablet ou celular." },
         { title: "Almoxarifado", icon: <Boxes />, desc: "Solicitação de insumos sem deslocamento." },
         { title: "PCP", icon: <BarChart3 />, desc: "Controle total e liberação de OPs." },
         { title: "Mensageria", icon: <MessageSquare />, desc: "Canais de comunicação interna por setor." },
@@ -575,7 +744,7 @@ const ColosArchitectureSlide = () => (
           {[
             { level: "Nível 4", title: "Empresa (ERP)", items: ["Gestão Corporativa / Protheus"], color: "bg-[#1B2631]" },
             { level: "Nível 3", title: "Fábrica (MES + WMS)", items: ["MES Amafil", "Gestão de Dados", "Banco de Dados Central"], color: "bg-[#00AA4D]" },
-            { level: "Nível 2", title: "Linha (CoLOS)", items: ["Design de Mensagem", "Relatórios", "Produção HMI", "Aplicativo Móvel"], color: "bg-[#5B2C6F]" },
+            { level: "Nível 2", title: "Linha (CoLOS)", items: ["Design de Mensagem", "Production", "Administrator"], color: "bg-[#5B2C6F]" },
             { level: "Nível 1", title: "Dispositivo", items: ["Scanners", "Codificadores", "Etiquetadores", "Visão", "CLP"], color: "bg-[#2E4053]" },
             { level: "Nível 0", title: "Esteira", items: ["Item", "Caixa", "Palete"], color: "bg-[#5D6D7E]" }
           ].map((lvl, index) => (
@@ -685,7 +854,7 @@ const ColosBenefitsSlide = () => (
           transition={{ repeat: Infinity, duration: 4 }}
           className="mb-8"
         >
-          <div className="w-32 h-32 bg-white rounded-full shadow-lg flex items-center justify-center mb-4 relative p-4">
+          <div className="w-40 h-40 bg-white rounded-full shadow-lg flex items-center justify-center mb-4 relative p-5">
             <img 
               src="https://marksys.com.br/wp-content/uploads/2025/05/colos-flower-400x400-25.jpg" 
               alt="CoLOS Logo"
@@ -695,11 +864,11 @@ const ColosBenefitsSlide = () => (
                 e.currentTarget.style.display = 'none';
               }}
             />
-            <Settings size={40} className="text-[#5B2C6F] absolute opacity-20" />
+            <Settings size={48} className="text-[#5B2C6F] absolute opacity-20" />
             <motion.div 
               animate={{ rotate: 360 }} 
               transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-              className="absolute inset-0 border-2 border-dashed border-purple-200 rounded-full"
+              className="absolute -inset-4 border-2 border-dashed border-purple-200 rounded-full"
             />
           </div>
         </motion.div>
@@ -804,12 +973,12 @@ const MarkemImajeProductsSlide = () => (
             <div className="w-full space-y-3 px-2">
               <div className="flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase">
                 <span>Eficiência de Linha</span>
-                <span className="text-[#00AA4D]">99.8% UP-TIME</span>
+                <span className="text-[#00AA4D]">UP-TIME</span>
               </div>
               <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ width: 0 }}
-                  animate={{ width: '99.8%' }} 
+                  animate={{ width: '100%' }} 
                   transition={{ delay: 1, duration: 2 }} 
                   className="h-full bg-gradient-to-r from-[#5B2C6F] to-[#00AA4D]"
                 />
@@ -918,6 +1087,10 @@ const DatecPartnershipSlide = () => (
         />
       </div>
       <span className="text-[#EE7101] font-bold uppercase tracking-[0.3em] text-sm">Parceiro Estratégico</span>
+      <p className="text-gray-500 text-sm mt-4 max-w-lg leading-relaxed">
+        A <strong className="font-semibold text-gray-700">Datec Solution</strong> faz parte do{' '}
+        <strong className="font-semibold text-gray-800">Grupo Soma</strong>.
+      </p>
     </motion.div>
 
     <div className="grid grid-cols-2 gap-16 max-w-4xl">
@@ -926,9 +1099,9 @@ const DatecPartnershipSlide = () => (
            <Zap className="text-[#EE7101]" /> Eficiência de Campo
         </h3>
         <p className="text-gray-600 text-sm leading-relaxed">
-          Instalação de sensores de alta precisão em embaladoras, 
-          enfardadeiras e pesagem, garantindo que o MES receba dados 
-          auditáveis sem intervenção humana.
+          Montagem de painéis, execução da infraestrutura e passagem de cabos com identificação e testes,
+          integração dos equipamentos à rede industrial e condução de projetos — da engenharia de campo à
+          entrada em operação, com rastreabilidade documental para o MES.
         </p>
       </div>
       <div className="text-left">
@@ -950,141 +1123,174 @@ const DatecPartnershipSlide = () => (
 );
 
 const FlowSlide = () => (
-  <div className="flex flex-col h-full p-8 pb-24 bg-gray-50 overflow-hidden">
-    <div className="mb-6 text-center">
-      <h3 className="text-sm font-semibold uppercase tracking-widest text-[#00AA4D] mb-1 font-mono">Infraestrutura & Fluxo de Dados</h3>
-      <h2 className="text-3xl font-bold text-[#111827]">Ecossistema MES.Amafil</h2>
+  <div className="flex flex-col h-full min-h-0 p-8 pt-6 pb-28 bg-gray-50 overflow-hidden">
+    <div className="mb-3 md:mb-4 text-center shrink-0">
+      <h3 className="text-[11px] md:text-sm font-semibold uppercase tracking-widest text-[#00AA4D] mb-1 font-mono">
+        Infraestrutura & Fluxo de Dados
+      </h3>
+      <h2 className="text-2xl md:text-3xl font-bold text-[#111827] leading-tight">
+        Ecossistema MES.Amafil
+      </h2>
     </div>
 
-    <div className="flex-grow grid grid-cols-12 gap-4 relative">
-      <div className="col-span-12 flex justify-center mb-2">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="px-6 py-3 bg-gray-900 text-white rounded-2xl shadow-xl border border-gray-700 flex flex-col items-center"
-        >
-          <Database size={20} className="mb-1 text-blue-400" />
-          <span className="text-xs font-black uppercase tracking-widest">TOTVS Protheus</span>
-          <span className="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">ERP Corporativo (SIGAPCP)</span>
-        </motion.div>
-      </div>
-
-      <div className="col-span-12 flex justify-center h-8 -mt-2">
-        <div className="w-px bg-dashed border-l border-gray-300 h-full relative">
-          <ArrowRightLeft className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-blue-400 rotate-90" size={14} />
+    <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 -mr-1">
+      <div className="grid grid-cols-12 gap-3 md:gap-4 relative pb-1 min-h-0">
+        <div className="col-span-12 flex justify-center mb-1 shrink-0">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="px-5 py-2.5 bg-gray-900 text-white rounded-2xl shadow-xl border border-gray-700 flex flex-col items-center"
+          >
+            <Database size={18} className="mb-0.5 text-blue-400" />
+            <span className="text-[11px] font-black uppercase tracking-widest">TOTVS Protheus</span>
+            <span className="text-[9px] text-gray-400 uppercase font-bold tracking-tighter">
+              ERP Corporativo (SIGAPCP)
+            </span>
+          </motion.div>
         </div>
-      </div>
 
-      <div className="col-span-3">
-        <div className="h-full bg-white rounded-3xl border border-gray-200 p-4 shadow-sm flex flex-col justify-center gap-4">
-          <div className="px-3 py-1 bg-gray-100 rounded-full text-[9px] font-bold text-gray-400 text-center uppercase tracking-widest mb-2">Perfis (PWA)</div>
-          {[
-            { label: "PCP", icon: <BarChart3 size={16} /> },
-            { label: "Operação", icon: <Boxes size={16} /> },
-            { label: "Manutenção", icon: <Wrench size={16} /> },
-            { label: "Gestão", icon: <Settings size={16} /> }
-          ].map((u, i) => (
-            <div key={i} className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl border border-gray-100">
-              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-[#00AA4D] shadow-sm">{u.icon}</div>
-              <span className="text-xs font-bold text-gray-700">{u.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="col-span-6 flex flex-col gap-4">
-        <div className="bg-[#00AA4D] rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full"></div>
-          <div className="relative flex justify-between items-center mb-4">
-            <div>
-              <h4 className="text-lg font-black uppercase tracking-tighter">Servidor MES</h4>
-              <p className="text-[10px] text-green-100 uppercase font-bold tracking-widest opacity-70">On-Premises Runtime</p>
-            </div>
-            <div className="flex gap-2">
-              <div className="px-2 py-1 bg-white/20 rounded-md text-[9px] font-bold">NODE.JS 22</div>
-              <div className="px-2 py-1 bg-white/20 rounded-md text-[9px] font-bold">FASTIFY</div>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-white/10 p-3 rounded-2xl flex flex-col items-center">
-              <Activity size={20} className="mb-2" />
-              <span className="text-[9px] font-bold uppercase">Realtime</span>
-            </div>
-            <div className="bg-white/10 p-3 rounded-2xl flex flex-col items-center border border-white/20">
-              <Database size={20} className="mb-2" />
-              <span className="text-[9px] font-bold uppercase">Auth / DB</span>
-            </div>
-            <div className="bg-white/10 p-3 rounded-2xl flex flex-col items-center">
-              <ArrowRightLeft size={20} className="mb-2" />
-              <span className="text-[9px] font-bold uppercase">Proxy</span>
-            </div>
+        <div className="col-span-12 flex justify-center h-6 -mt-1 shrink-0">
+          <div className="w-px border-l border-dashed border-gray-300 h-full relative">
+            <ArrowRightLeft
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-blue-400 rotate-90"
+              size={12}
+            />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm flex items-center gap-4">
-            <div className="p-3 bg-blue-50 rounded-xl"><Database className="text-blue-600" size={24} /></div>
-            <div>
-              <h5 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Central DB</h5>
-              <p className="text-xs font-bold text-gray-800">PostgreSQL 16</p>
+        <div className="col-span-12 md:col-span-3 min-h-0">
+          <div className="h-full min-h-0 bg-white rounded-2xl border border-gray-200 p-3 shadow-sm flex flex-col justify-start gap-2">
+            <div className="px-2 py-1 bg-gray-100 rounded-full text-[8px] font-bold text-gray-400 text-center uppercase tracking-widest">
+              Perfis (PWA)
+            </div>
+            {[
+              { label: 'PCP', icon: <BarChart3 size={15} /> },
+              { label: 'Operação', icon: <Boxes size={15} /> },
+              { label: 'Manutenção', icon: <Wrench size={15} /> },
+              { label: 'Gestão', icon: <Settings size={15} /> },
+            ].map((u, i) => (
+              <div key={i} className="flex items-center gap-2 p-2 bg-gray-50 rounded-xl border border-gray-100">
+                <div className="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-[#00AA4D] shadow-sm shrink-0">
+                  {u.icon}
+                </div>
+                <span className="text-[11px] font-bold text-gray-700">{u.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="col-span-12 md:col-span-6 flex flex-col gap-3 min-h-0">
+          <div className="bg-[#00AA4D] rounded-2xl p-4 text-white shadow-xl relative overflow-hidden shrink-0">
+            <div className="absolute top-0 right-0 w-28 h-28 bg-white/10 rounded-bl-full" />
+            <div className="relative flex justify-between items-start gap-3 mb-3">
+              <div className="min-w-0">
+                <h4 className="text-base font-black uppercase tracking-tighter">Servidor MES</h4>
+                <p className="text-[9px] text-green-100 uppercase font-bold tracking-widest opacity-70">
+                  On-Premises Runtime
+                </p>
+              </div>
+              <div className="flex gap-1.5 shrink-0 flex-wrap justify-end">
+                <div className="px-2 py-0.5 bg-white/20 rounded text-[8px] font-bold">NODE.JS 22</div>
+                <div className="px-2 py-0.5 bg-white/20 rounded text-[8px] font-bold">FASTIFY</div>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <div className="bg-white/10 p-2.5 rounded-xl flex flex-col items-center">
+                <Activity size={18} className="mb-1" />
+                <span className="text-[8px] font-bold uppercase">Realtime</span>
+              </div>
+              <div className="bg-white/10 p-2.5 rounded-xl flex flex-col items-center border border-white/20">
+                <Database size={18} className="mb-1" />
+                <span className="text-[8px] font-bold uppercase">Auth / DB</span>
+              </div>
+              <div className="bg-white/10 p-2.5 rounded-xl flex flex-col items-center">
+                <ArrowRightLeft size={18} className="mb-1" />
+                <span className="text-[8px] font-bold uppercase">Proxy</span>
+              </div>
             </div>
           </div>
-          <div className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm flex items-center gap-4">
-            <div className="p-3 bg-red-50 rounded-xl"><Activity className="text-red-500" size={24} /></div>
-            <div>
-              <h5 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Queue & Cache</h5>
-              <p className="text-xs font-bold text-gray-800">Redis / BullMQ</p>
+
+          <div className="grid grid-cols-2 gap-3 shrink-0">
+            <div className="bg-white rounded-xl border border-gray-200 p-3 shadow-sm flex items-center gap-3 min-w-0">
+              <div className="p-2 bg-blue-50 rounded-lg shrink-0">
+                <Database className="text-blue-600" size={20} />
+              </div>
+              <div className="min-w-0">
+                <h5 className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">Central DB</h5>
+                <p className="text-[11px] font-bold text-gray-800">PostgreSQL 16</p>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-3 shadow-sm flex items-center gap-3 min-w-0">
+              <div className="p-2 bg-red-50 rounded-lg shrink-0">
+                <Activity className="text-red-500" size={20} />
+              </div>
+              <div className="min-w-0">
+                <h5 className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">Queue & Cache</h5>
+                <p className="text-[11px] font-bold text-gray-800">Redis / BullMQ</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="col-span-3">
-        <div className="h-full bg-[#111827] rounded-3xl p-6 text-white flex flex-col justify-between">
-          <div>
-            <h4 className="text-sm font-bold mb-4 flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+        <div className="col-span-12 md:col-span-3 min-h-0">
+          <div className="h-full min-h-0 bg-[#111827] rounded-2xl p-4 text-white flex flex-col">
+            <h4 className="text-xs font-bold mb-3 flex items-center gap-2 shrink-0">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shrink-0" />
               Dispositivos
             </h4>
-            <div className="space-y-4">
+            <div className="space-y-2 flex-1 min-h-0">
               {[
-                { label: "Painéis Industriais", type: "HMI" },
-                { label: "Tablets Linha", type: "Mobile" },
-                { label: "Smartphones", type: "PWA" }
+                { label: 'Painéis Industriais', type: 'HMI' },
+                { label: 'Tablets Linha', type: 'Mobile' },
+                { label: 'Smartphones', type: 'PWA' },
               ].map((d, i) => (
-                <div key={i} className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
-                  <span className="text-xs font-medium text-gray-400">{d.label}</span>
-                  <span className="text-[9px] font-black bg-white/10 px-2 py-1 rounded text-white italic">{d.type}</span>
+                <div
+                  key={i}
+                  className="flex justify-between items-center gap-2 bg-white/5 p-2.5 rounded-xl border border-white/5"
+                >
+                  <span className="text-[11px] font-medium text-gray-400 truncate">{d.label}</span>
+                  <span className="text-[8px] font-black bg-white/10 px-1.5 py-0.5 rounded text-white italic shrink-0">
+                    {d.type}
+                  </span>
                 </div>
               ))}
             </div>
-          </div>
-          <div className="mt-auto pt-6 border-t border-white/5 text-center">
-            <p className="text-[9px] text-gray-500 uppercase tracking-[0.2em]">Interface Unificada</p>
+            <div className="mt-3 pt-3 border-t border-white/5 text-center shrink-0">
+              <p className="text-[8px] text-gray-500 uppercase tracking-[0.18em]">Interface Unificada</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="col-span-12 mt-2">
-        <div className="bg-gray-200/50 rounded-[2.5rem] p-6 border-t-2 border-gray-300 relative">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gray-900 border border-gray-700 text-white text-[9px] font-black uppercase rounded-full shadow-lg">
-            Hardware & Automação (IOT)
-          </div>
-          
-          <div className="grid grid-cols-5 gap-4">
-            <div className="col-span-4 grid grid-cols-4 gap-4">
-              {["Empacotadora", "Balança", "Costuradeira", "Enfardadeira"].map((m, i) => (
-                <div key={i} className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex flex-col items-center gap-2">
-                  <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400"><Boxes size={20} /></div>
-                  <span className="text-[10px] font-bold text-gray-700 uppercase tracking-tighter">{m}</span>
-                </div>
-              ))}
+        <div className="col-span-12 mt-1 shrink-0">
+          <div className="bg-gray-200/50 rounded-2xl p-4 border-t-2 border-gray-300 relative">
+            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-gray-900 border border-gray-700 text-white text-[8px] font-black uppercase rounded-full shadow-lg whitespace-nowrap">
+              Hardware & Automação (IOT)
             </div>
-            
-            <div className="bg-[#EE7101] rounded-2xl p-4 text-white shadow-lg flex flex-col items-center justify-center text-center">
-              <Cpu size={24} className="mb-2" />
-              <h5 className="text-[10px] font-black uppercase mb-1">Gateway IoT</h5>
-              <p className="text-[9px] leading-tight text-white/80">Buffer Local <br/> Modbus/OPC</p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 mt-2">
+              <div className="sm:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
+                {['Empacotadora', 'Balança', 'Costuradeira', 'Enfardadeira'].map((m, i) => (
+                  <div
+                    key={i}
+                    className="bg-white p-3 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center gap-1.5"
+                  >
+                    <div className="w-9 h-9 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">
+                      <Boxes size={18} />
+                    </div>
+                    <span className="text-[9px] font-bold text-gray-700 uppercase tracking-tighter text-center leading-tight">
+                      {m}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-[#EE7101] rounded-xl p-3 text-white shadow-lg flex flex-col items-center justify-center text-center min-h-[100px]">
+                <Cpu size={22} className="mb-1 shrink-0" />
+                <h5 className="text-[9px] font-black uppercase mb-0.5">Gateway IoT</h5>
+                <p className="text-[8px] leading-snug text-white/80">
+                  Buffer Local <br /> Modbus/OPC
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -1092,6 +1298,196 @@ const FlowSlide = () => (
     </div>
   </div>
 );
+
+/** Linha de embalagem: gateway central consolidando sinais e liberando MES/DB e IO. Vem após o slide de fluxo geral do ecossistema. */
+const PackagingLineGatewaySlide = () => {
+  const equipment = [
+    { label: 'Embaladora', sub: 'Indica unidade do produto', icon: <Boxes size={18} className="text-[#EE7101]" /> },
+    { label: 'Dosagem', sub: 'Produto na embalagem', icon: <Droplets size={18} className="text-blue-500" /> },
+    { label: 'Balança', sub: 'Confirma peso', icon: <Scale size={18} className="text-emerald-600" /> },
+    { label: 'Enfardadeira', sub: 'Confirma o fardo', icon: <Boxes size={18} className="text-violet-600" /> },
+    {
+      label: 'Hikrobot SC3000',
+      sub: 'OCR e leitura de código',
+      icon: <ScanBarcode size={18} className="text-[#FF6A00]" />
+    }
+  ];
+
+  return (
+    <div className="flex flex-col h-full min-h-0 p-8 pt-6 pb-28 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
+      <div className="mb-4 md:mb-5 text-center shrink-0">
+        <h3 className="text-[11px] font-semibold uppercase tracking-widest text-[#EE7101] mb-1 font-mono">
+          Automação de linha
+        </h3>
+        <h2 className="text-xl md:text-2xl font-bold text-[#111827] leading-tight">
+          Gateway no centro: da embaladora ao fardo
+        </h2>
+        <p className="text-sm text-gray-500 mt-2 md:mt-3 max-w-3xl mx-auto leading-snug">
+          Consolidação de eventos da linha, persistência auditável e ações de campo (alarme e intertravamento). O gateway também pode receber{' '}
+          <strong className="font-semibold text-gray-700">OCR e leitura de código</strong> do sensor{' '}
+          <strong className="font-semibold text-[#FF6A00]">SC3000 Hikrobot</strong>.
+        </p>
+      </div>
+
+      <div className="flex flex-1 min-h-0 flex-col gap-3 overflow-hidden">
+        {/* Área do diagrama: rolagem interna se faltar altura (evita sobrepor o bloco de regras) */}
+        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 -mr-1">
+          <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-8 items-stretch justify-center max-w-6xl mx-auto w-full pb-1">
+            {/* Entradas — equipamentos */}
+            <div className="flex flex-col gap-2 justify-start lg:w-[220px] shrink-0 lg:pr-3">
+              <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest text-center lg:text-left mb-1">
+                Entradas (dados de campo)
+              </p>
+              {equipment.map((eq, i) => (
+                <motion.div
+                  key={eq.label}
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.06 }}
+                  className="flex items-center gap-3 p-2.5 bg-white rounded-xl border border-gray-200 shadow-sm relative"
+                >
+                  <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center shrink-0 border border-gray-100">
+                    {eq.icon}
+                  </div>
+                  <div className="min-w-0 text-left">
+                    <div className="text-xs font-bold text-gray-900">{eq.label}</div>
+                    <div className="text-[10px] text-gray-500 leading-snug">{eq.sub}</div>
+                  </div>
+                  <ChevronRight className="absolute -right-1 top-1/2 -translate-y-1/2 text-gray-300 hidden lg:block pointer-events-none" size={14} />
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Gateway + saídas */}
+            <div className="flex flex-1 min-w-0 flex-col items-center justify-start gap-3 min-h-0">
+              <motion.div
+                initial={{ scale: 0.92, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 120, damping: 18 }}
+                className="w-full max-w-sm bg-[#111827] rounded-2xl p-4 text-white shadow-2xl border border-gray-800 relative shrink-0"
+              >
+                <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#EE7101]/40 to-transparent opacity-50 pointer-events-none" />
+                <div className="relative flex flex-col items-center text-center">
+                  <div className="w-12 h-12 rounded-xl bg-[#EE7101] flex items-center justify-center mb-2 shadow-lg">
+                    <Cpu size={24} className="text-white" />
+                  </div>
+                  <h4 className="text-xs font-black uppercase tracking-tight">Gateway industrial</h4>
+                  <p className="text-[10px] text-gray-400 mt-1 leading-relaxed px-1">
+                    Correlaciona contagens, dosagem, peso e fechamento do fardo; integra, quando disponível, resultados de{' '}
+                    <span className="text-gray-300">OCR e leitura de código</span> do <span className="text-[#FF6A00]">SC3000</span> antes de registrar produção.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Saídas digitais */}
+              <div className="flex flex-wrap justify-center gap-2 w-full shrink-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="flex items-center gap-2 px-3 py-2.5 bg-white rounded-xl border border-gray-200 shadow-sm"
+                >
+                  <Database className="text-blue-600" size={20} />
+                  <div className="text-left">
+                    <div className="text-[10px] font-black text-gray-400 uppercase">Banco de dados</div>
+                    <div className="text-xs font-bold text-gray-800">Histórico e telemetria</div>
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.28 }}
+                  className="flex items-center gap-2 px-3 py-2.5 bg-[#00AA4D]/10 rounded-xl border border-[#00AA4D]/25 shadow-sm"
+                >
+                  <Activity className="text-[#00AA4D]" size={20} />
+                  <div className="text-left">
+                    <div className="text-[10px] font-black text-[#00AA4D] uppercase">MES</div>
+                    <div className="text-xs font-bold text-gray-800">Produção confirmada</div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Saídas IO */}
+              <div className="w-full max-w-md shrink-0">
+                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest text-center mb-1.5">
+                  Saídas IO (campo)
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.35 }}
+                    className="flex items-center gap-2 p-2.5 rounded-xl bg-amber-50 border border-amber-200"
+                  >
+                    <Bell className="text-amber-600 shrink-0" size={18} />
+                    <div className="text-left min-w-0">
+                      <div className="text-[10px] font-bold text-amber-900 uppercase">Torre de alarme</div>
+                      <div className="text-[10px] text-amber-800/90 leading-snug">Sinalização de inconformidade</div>
+                    </div>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.42 }}
+                    className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-100 border border-slate-200"
+                  >
+                    <Lock className="text-slate-700 shrink-0" size={18} />
+                    <div className="text-left min-w-0">
+                      <div className="text-[10px] font-bold text-slate-800 uppercase">Intertravamento</div>
+                      <div className="text-[10px] text-slate-600 leading-snug">Segurança e parada coordenada</div>
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Regras de reconciliação — shrink-0 para nunca ser coberto pelo diagrama */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          className="shrink-0 w-full max-w-7xl mx-auto bg-white rounded-2xl border border-gray-200 p-4 md:p-5 shadow-sm"
+        >
+          <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 text-center">
+            Lógica de reconciliação e perdas
+          </h4>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5 text-[10px] md:text-[11px] text-gray-600 leading-snug">
+          <li className="flex gap-2">
+            <CheckCircle2 size={14} className="text-[#00AA4D] shrink-0 mt-0.5" />
+            <span>
+              A <strong className="text-gray-800">unidade do produto</strong> é indicada pela embaladora e{' '}
+              <strong className="text-gray-800">confirmada</strong> pela balança e pela enfardadeira; o que sai da embaladora deve{' '}
+              <strong className="text-gray-800">bater com a quantidade de produtos nos fardos</strong>.
+            </span>
+          </li>
+          <li className="flex gap-2">
+            <AlertCircle size={14} className="text-amber-600 shrink-0 mt-0.5" />
+            <span>
+              Contagem na embaladora <strong className="text-gray-800">sem sinal de dosagem</strong>: embalagem retirada para ajuste{' '}
+              <strong className="text-gray-800">sem produto</strong> → indicador de <strong className="text-gray-800">perda de embalagem</strong>.
+            </span>
+          </li>
+          <li className="flex gap-2">
+            <AlertCircle size={14} className="text-red-500 shrink-0 mt-0.5" />
+            <span>
+              Com dosagem ativa, o produto passou pela balança e <strong className="text-gray-800">não chegou à enfardadeira</strong>{' '}
+              (retirado por peso) → indicador de <strong className="text-gray-800">perda de produto</strong>.
+            </span>
+          </li>
+          <li className="flex gap-2">
+            <CheckCircle2 size={14} className="text-[#2B57A3] shrink-0 mt-0.5" />
+            <span>
+              <strong className="text-gray-800">Produção confirmada no MES apenas com o fardo produzido</strong> — fechamento do ciclo na enfardadeira.
+            </span>
+          </li>
+        </ul>
+      </motion.div>
+      </div>
+    </div>
+  );
+};
 
 const ConclusionSlide = () => (
   <div className="flex flex-col items-center justify-center h-full text-center p-12 bg-white relative overflow-hidden">
@@ -1257,116 +1653,122 @@ const HikrobotIntroSlide = () => (
 );
 
 const HikrobotErrorProofingSlide = () => (
-  <div className="flex flex-col h-full p-12 bg-white relative">
-    <div className="absolute top-8 right-12 z-10">
-      <HikrobotLogo className="h-7" />
+  <div className="flex flex-col h-full min-h-0 p-8 pt-5 pb-28 bg-white relative overflow-hidden">
+    <div className="absolute top-4 right-6 sm:right-10 z-10 pointer-events-none">
+      <HikrobotLogo className="h-6 sm:h-7" />
     </div>
 
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center flex-grow">
-      <div>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-[#FF6A00] rounded-lg flex items-center justify-center">
-            <ScanLine size={20} className="text-white" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-[#FF6A00] uppercase tracking-tighter">SC3000 Series</h3>
-            <p className="text-[10px] text-gray-400 font-bold uppercase">Error-Proofing • Inspeção Antierro</p>
-          </div>
-        </div>
-
-        <h2 className="text-4xl font-bold text-[#111827] mb-6 leading-tight">
-          Sensor compacto, <span className="text-[#FF6A00]">inspeção à prova de erros</span>
-        </h2>
-
-        <div className="space-y-4">
-          {[
-            {
-              title: 'Série SC3000 + SCMVS',
-              desc: 'Solução compacta com ferramentas de detecção de alto desempenho. SCMVS reduz o esforço de parametrização em campo — completa e custo-benefício.',
-              icon: <Cpu size={18} className="text-[#FF6A00]" />
-            },
-            {
-              title: 'Algoritmos antierro',
-              desc: 'Presença/ausência, orientação (cima/baixo), posicionamento e contagem — error-proofing aplicado direto na linha.',
-              icon: <AlertCircle size={18} className="text-[#FF6A00]" />
-            },
-            {
-              title: 'OCR e leitura de código',
-              desc: 'Reconhecimento de texto em etiquetas e decodificação de códigos (barras e matriciais) para validação automática na linha.',
-              icon: <ScanBarcode size={18} className="text-[#FF6A00]" />
-            },
-            {
-              title: 'Variedade de ferramentas',
-              desc: 'Adequação a formatos diferentes de peças na mesma linha, simplificando a aplicação de visão no chão de fábrica.',
-              icon: <Wrench size={18} className="text-[#FF6A00]" />
-            }
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="flex gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100"
-            >
-              <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center shrink-0 border border-orange-100">
-                {item.icon}
-              </div>
-              <div>
-                <h4 className="font-bold text-gray-900 text-sm">{item.title}</h4>
-                <p className="text-sm text-gray-500 leading-snug">{item.desc}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="relative group">
-        <div className="absolute inset-0 bg-[#FF6A00]/5 rounded-[3rem] blur-3xl group-hover:bg-[#FF6A00]/10 transition-all duration-700"></div>
-        <div className="bg-white border border-gray-100 rounded-[2.5rem] p-10 shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF6A00]/5 rounded-bl-full"></div>
-          <div className="flex flex-col items-center gap-6">
-            <motion.img
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              src={SC3000_IMAGE_URL}
-              alt="Hikrobot SC3000 — sensor de visão"
-              referrerPolicy="no-referrer"
-              className="w-full max-w-[280px] h-auto object-contain drop-shadow-xl"
-            />
-            <div className="w-full grid grid-cols-2 gap-3 px-2">
-              {[
-                { label: 'Presença / Ausência', icon: <CheckCircle2 size={14} className="text-[#FF6A00]" /> },
-                { label: 'Orientação U/D', icon: <ArrowRightLeft size={14} className="text-[#FF6A00]" /> },
-                { label: 'Posicionamento', icon: <Focus size={14} className="text-[#FF6A00]" /> },
-                { label: 'Contagem', icon: <Boxes size={14} className="text-[#FF6A00]" /> },
-                { label: 'OCR', icon: <FileText size={14} className="text-[#FF6A00]" /> },
-                { label: 'Leitura de código', icon: <ScanBarcode size={14} className="text-[#FF6A00]" /> }
-              ].map((tool, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + i * 0.05 }}
-                  className="flex items-center gap-2 p-2.5 bg-orange-50/40 rounded-lg border border-orange-100"
-                >
-                  {tool.icon}
-                  <span className="text-[11px] font-semibold text-gray-700">{tool.label}</span>
-                </motion.div>
-              ))}
+    <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain pr-1 -mr-1">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+        <div className="min-w-0 lg:pt-1">
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#FF6A00] rounded-lg flex items-center justify-center shrink-0">
+              <ScanLine size={20} className="text-white" />
             </div>
-            <div className="w-full space-y-2 pt-2">
-              <div className="flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase">
-                <span>Aderência a geometrias</span>
-                <span className="text-[#FF6A00]">Multi-formato</span>
+            <div className="min-w-0">
+              <h3 className="text-xs sm:text-sm font-bold text-[#FF6A00] uppercase tracking-tighter truncate">
+                SC3000 Series
+              </h3>
+              <p className="text-[9px] sm:text-[10px] text-gray-400 font-bold uppercase leading-tight">
+                Error-Proofing • Inspeção Antierro
+              </p>
+            </div>
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#111827] mb-4 sm:mb-5 leading-tight">
+            Sensor compacto, <span className="text-[#FF6A00]">inspeção à prova de erros</span>
+          </h2>
+
+          <div className="space-y-2 sm:space-y-3">
+            {[
+              {
+                title: 'Série SC3000 + SCMVS',
+                desc: 'Solução compacta com ferramentas de detecção de alto desempenho. SCMVS reduz o esforço de parametrização em campo — completa e custo-benefício.',
+                icon: <Cpu size={18} className="text-[#FF6A00]" />
+              },
+              {
+                title: 'Algoritmos antierro',
+                desc: 'Presença/ausência, orientação (cima/baixo), posicionamento e contagem — error-proofing aplicado direto na linha.',
+                icon: <AlertCircle size={18} className="text-[#FF6A00]" />
+              },
+              {
+                title: 'OCR e leitura de código',
+                desc: 'Reconhecimento de texto em etiquetas e decodificação de códigos (barras e matriciais) para validação automática na linha.',
+                icon: <ScanBarcode size={18} className="text-[#FF6A00]" />
+              },
+              {
+                title: 'Variedade de ferramentas',
+                desc: 'Adequação a formatos diferentes de peças na mesma linha, simplificando a aplicação de visão no chão de fábrica.',
+                icon: <Wrench size={18} className="text-[#FF6A00]" />
+              }
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="flex gap-2 sm:gap-3 p-3 sm:p-3.5 bg-gray-50 rounded-xl sm:rounded-2xl border border-gray-100"
+              >
+                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 border border-orange-100">
+                  {item.icon}
+                </div>
+                <div className="min-w-0">
+                  <h4 className="font-bold text-gray-900 text-xs sm:text-sm">{item.title}</h4>
+                  <p className="text-xs sm:text-sm text-gray-500 leading-snug mt-0.5">{item.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative group min-w-0">
+          <div className="absolute inset-0 bg-[#FF6A00]/5 rounded-3xl blur-2xl sm:blur-3xl group-hover:bg-[#FF6A00]/10 transition-all duration-700" />
+          <div className="bg-white border border-gray-100 rounded-2xl sm:rounded-[2rem] p-5 sm:p-6 lg:p-7 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-[#FF6A00]/5 rounded-bl-full" />
+            <div className="relative flex flex-col items-center gap-4 sm:gap-5">
+              <motion.img
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
+                src={SC3000_IMAGE_URL}
+                alt="Hikrobot SC3000 — sensor de visão"
+                referrerPolicy="no-referrer"
+                className="w-full max-w-[200px] sm:max-w-[240px] lg:max-w-[260px] h-auto object-contain drop-shadow-xl"
+              />
+              <div className="w-full grid grid-cols-2 gap-2 sm:gap-2.5 px-0 sm:px-1">
+                {[
+                  { label: 'Presença / Ausência', icon: <CheckCircle2 size={14} className="text-[#FF6A00] shrink-0" /> },
+                  { label: 'Orientação U/D', icon: <ArrowRightLeft size={14} className="text-[#FF6A00] shrink-0" /> },
+                  { label: 'Posicionamento', icon: <Focus size={14} className="text-[#FF6A00] shrink-0" /> },
+                  { label: 'Contagem', icon: <Boxes size={14} className="text-[#FF6A00] shrink-0" /> },
+                  { label: 'OCR', icon: <FileText size={14} className="text-[#FF6A00] shrink-0" /> },
+                  { label: 'Leitura de código', icon: <ScanBarcode size={14} className="text-[#FF6A00] shrink-0" /> }
+                ].map((tool, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 + i * 0.05 }}
+                    className="flex items-center gap-1.5 sm:gap-2 p-2 sm:p-2.5 bg-orange-50/40 rounded-lg border border-orange-100 min-w-0"
+                  >
+                    {tool.icon}
+                    <span className="text-[9px] sm:text-[11px] font-semibold text-gray-700 leading-tight">{tool.label}</span>
+                  </motion.div>
+                ))}
               </div>
-              <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: '92%' }}
-                  transition={{ delay: 0.8, duration: 1.6 }}
-                  className="h-full bg-gradient-to-r from-[#FF6A00] to-[#00AA4D]"
-                />
+              <div className="w-full space-y-1.5 pt-1">
+                <div className="flex justify-between items-center gap-2 text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase">
+                  <span className="truncate">Aderência a geometrias</span>
+                  <span className="text-[#FF6A00] shrink-0">Multi-formato</span>
+                </div>
+                <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: '92%' }}
+                    transition={{ delay: 0.8, duration: 1.6 }}
+                    className="h-full bg-gradient-to-r from-[#FF6A00] to-[#00AA4D]"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -1374,14 +1776,14 @@ const HikrobotErrorProofingSlide = () => (
       </div>
     </div>
 
-    <div className="mt-8 border-t border-gray-100 pt-6 flex justify-between items-center mb-12">
-      <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+    <div className="shrink-0 mt-2 sm:mt-3 border-t border-gray-100 pt-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+      <div className="text-[9px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-snug">
         Mais ferramentas → menos retrabalho na troca de peça
       </div>
-      <div className="flex gap-4 items-center">
-        <span className="text-[10px] font-bold text-[#FF6A00]">SCMVS • SC3000 SERIES</span>
-        <span className="text-gray-300">|</span>
-        <span className="text-[10px] font-bold text-[#2B57A3]">ERROR-PROOFING</span>
+      <div className="flex flex-wrap gap-x-3 gap-y-1 items-center text-[9px] sm:text-[10px]">
+        <span className="font-bold text-[#FF6A00]">SCMVS • SC3000 SERIES</span>
+        <span className="text-gray-300 hidden sm:inline">|</span>
+        <span className="font-bold text-[#2B57A3]">ERROR-PROOFING</span>
       </div>
     </div>
   </div>
@@ -1391,6 +1793,14 @@ const HikrobotErrorProofingSlide = () => (
 
 const slides = [
   { id: 'cover', component: <CoverSlide />, bg: 'bg-white' },
+  { id: 'soma-solution', component: <SomaSolutionSlide />, bg: 'bg-slate-50' },
+  { id: 'mi-products', component: <MarkemImajeProductsSlide />, bg: 'bg-white' },
+  { id: 'colos-arch', component: <ColosArchitectureSlide />, bg: 'bg-white' },
+  { id: 'colos-benefits', component: <ColosBenefitsSlide />, bg: 'bg-white' },
+  { id: 'datec-partner', component: <DatecPartnershipSlide />, bg: 'bg-white' },
+  { id: 'datec-hw', component: <DatecHardwareSlide />, bg: 'bg-white' },
+  { id: 'hikrobot-intro', component: <HikrobotIntroSlide />, bg: 'bg-white' },
+  { id: 'hikrobot-errorproofing', component: <HikrobotErrorProofingSlide />, bg: 'bg-white' },
   { id: 'problem', component: <ProblemSlide />, bg: 'bg-[#F9FAFB]' },
   { id: 'solution', component: <SolutionSlide />, bg: 'bg-white' },
   { id: 'dashboard', component: <DashboardMockup />, bg: 'bg-[#F5F6FA]' },
@@ -1398,13 +1808,7 @@ const slides = [
   { id: 'features', component: <FeaturesSlide />, bg: 'bg-[#F9FAFB]' },
   { id: 'architecture', component: <ArchitectureSlide />, bg: 'bg-white' },
   { id: 'flow', component: <FlowSlide />, bg: 'bg-gray-50' },
-  { id: 'datec-hw', component: <DatecHardwareSlide />, bg: 'bg-white' },
-  { id: 'datec-partner', component: <DatecPartnershipSlide />, bg: 'bg-white' },
-  { id: 'colos-arch', component: <ColosArchitectureSlide />, bg: 'bg-white' },
-  { id: 'colos-benefits', component: <ColosBenefitsSlide />, bg: 'bg-white' },
-  { id: 'mi-products', component: <MarkemImajeProductsSlide />, bg: 'bg-white' },
-  { id: 'hikrobot-intro', component: <HikrobotIntroSlide />, bg: 'bg-white' },
-  { id: 'hikrobot-errorproofing', component: <HikrobotErrorProofingSlide />, bg: 'bg-white' },
+  { id: 'packaging-gateway', component: <PackagingLineGatewaySlide />, bg: 'bg-white' },
   { id: 'conclusion', component: <ConclusionSlide />, bg: 'bg-[#F9FAFB]' }
 ];
 

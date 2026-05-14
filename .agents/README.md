@@ -17,6 +17,7 @@ Antes de executar qualquer tarefa, identifique qual skill se aplica e carregue o
 | Design System | `design-system.md` | `/design-system` | Cores, tokens CSS, componentes UI |
 | README | `skill-readme.md` | `/readme` | Criar ou atualizar o README.md do projeto |
 | Criar/melhorar skills | `skill-creator.md` | `/skill-creator` | Criar, iterar e otimizar skills com evals |
+| Node-RED (flows, nodes, integração) | `nodered.md` | `/nodered` | Flows, nodes contrib, PostgreSQL, Dashboard, FTP |
 
 ---
 

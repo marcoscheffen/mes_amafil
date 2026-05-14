@@ -1,0 +1,554 @@
+[
+    {
+        "id": "728bad3a6f993445",
+        "type": "tab",
+        "label": "mes_db",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a7313ce498a9d3aa",
+        "type": "tab",
+        "label": "MES T1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c23297b00d818954",
+        "type": "postgreSQLConfig",
+        "name": "",
+        "host": "postgres",
+        "hostFieldType": "str",
+        "port": "5432",
+        "portFieldType": "num",
+        "database": "mes_db",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": 10,
+        "maxFieldType": "num",
+        "idle": 1000,
+        "idleFieldType": "num",
+        "connectionTimeout": 10000,
+        "connectionTimeoutFieldType": "num",
+        "user": "mes",
+        "userFieldType": "str",
+        "password": "senha",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "31f5b7b2c624d83c",
+        "type": "ui_tab",
+        "name": "Coamo - Automaticão de Etiquetas - Soma Solution",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "9f0b04c47ed54143",
+        "type": "ui_group",
+        "name": "Informações do Sistema",
+        "tab": "31f5b7b2c624d83c",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "51efbd9f090c70d2",
+        "type": "ui_group",
+        "name": "Ação",
+        "tab": "31f5b7b2c624d83c",
+        "order": 2,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "6c0bd6a9347fe3ab",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "5ffb9178ea142f27",
+        "type": "global-config",
+        "env": [
+            {
+                "name": "produto",
+                "value": "243657",
+                "type": "str"
+            }
+        ],
+        "modules": {
+            "node-red-contrib-postgresql": "0.15.4",
+            "node-red-dashboard": "3.6.6"
+        }
+    },
+    {
+        "id": "898ce89bdac5e563",
+        "type": "postgresql",
+        "z": "728bad3a6f993445",
+        "name": "mes_db (info)",
+        "query": "SELECT \n  current_database() AS banco,\n  current_user AS usuario,\n  version() AS versao_postgres,\n  now() AS data_hora;\n",
+        "postgreSQLConfig": "c23297b00d818954",
+        "split": false,
+        "rowsPerMsg": "100",
+        "outputs": 1,
+        "x": 700,
+        "y": 120,
+        "wires": [
+            [
+                "a66cb8459f4942f7"
+            ]
+        ]
+    },
+    {
+        "id": "a66cb8459f4942f7",
+        "type": "debug",
+        "z": "728bad3a6f993445",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "e07069356af0a8d7",
+        "type": "inject",
+        "z": "728bad3a6f993445",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 440,
+        "y": 120,
+        "wires": [
+            [
+                "898ce89bdac5e563"
+            ]
+        ]
+    },
+    {
+        "id": "250924a7eecd1ed0",
+        "type": "inject",
+        "z": "a7313ce498a9d3aa",
+        "name": "sensor 01 (ligado)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "str",
+        "x": 170,
+        "y": 860,
+        "wires": [
+            [
+                "a1b2c3d4e5f60001"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60013",
+        "type": "inject",
+        "z": "a7313ce498a9d3aa",
+        "name": "sensor 01 (desligado)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "false",
+        "payloadType": "str",
+        "x": 180,
+        "y": 940,
+        "wires": [
+            [
+                "a1b2c3d4e5f60001"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60001",
+        "type": "switch",
+        "z": "a7313ce498a9d3aa",
+        "name": "rota sensor",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "true",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "false",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 410,
+        "y": 900,
+        "wires": [
+            [
+                "a1b2c3d4e5f60002"
+            ],
+            [
+                "a1b2c3d4e5f60005"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60002",
+        "type": "function",
+        "z": "a7313ce498a9d3aa",
+        "name": "montar INSERT",
+        "func": "var contador = global.get(\"contador01\") || 0;\ncontador++;\nglobal.set(\"contador01\", contador);\n\nmsg.params = [\n    \"T1-M1\",\n    \"sensor_01\",\n    contador,\n    \"243657\"\n];\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 840,
+        "wires": [
+            [
+                "a1b2c3d4e5f60003"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60003",
+        "type": "postgresql",
+        "z": "a7313ce498a9d3aa",
+        "name": "inserir evento",
+        "query": "INSERT INTO sensor_eventos (id_maq, id_trigger, hora_entrada, contador, produto)\nVALUES ($1, $2, NOW(), $3, $4)",
+        "postgreSQLConfig": "c23297b00d818954",
+        "split": false,
+        "rowsPerMsg": "100",
+        "outputs": 1,
+        "x": 860,
+        "y": 840,
+        "wires": [
+            [
+                "a1b2c3d4e5f60004"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60004",
+        "type": "debug",
+        "z": "a7313ce498a9d3aa",
+        "name": "INSERT ok",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "a1b2c3d4e5f60005",
+        "type": "function",
+        "z": "a7313ce498a9d3aa",
+        "name": "montar UPDATE hora_saida",
+        "func": "msg.params = [\"T1-M1\"];\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 960,
+        "wires": [
+            [
+                "a1b2c3d4e5f60006"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60006",
+        "type": "postgresql",
+        "z": "a7313ce498a9d3aa",
+        "name": "registrar saida",
+        "query": "UPDATE sensor_eventos\nSET hora_saida = NOW()\nWHERE id = (\n    SELECT id FROM sensor_eventos\n    WHERE id_maq = $1 AND hora_saida IS NULL\n    ORDER BY hora_entrada DESC\n    LIMIT 1\n)",
+        "postgreSQLConfig": "c23297b00d818954",
+        "split": false,
+        "rowsPerMsg": "100",
+        "outputs": 1,
+        "x": 880,
+        "y": 960,
+        "wires": [
+            [
+                "a1b2c3d4e5f60007"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60007",
+        "type": "debug",
+        "z": "a7313ce498a9d3aa",
+        "name": "UPDATE ok",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "c16680cf02ac437f",
+        "type": "inject",
+        "z": "a7313ce498a9d3aa",
+        "name": "reset",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "reset",
+        "payloadType": "str",
+        "x": 160,
+        "y": 700,
+        "wires": [
+            [
+                "a1b2c3d4e5f60008"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60008",
+        "type": "function",
+        "z": "a7313ce498a9d3aa",
+        "name": "zerar contador",
+        "func": "global.set(\"contador01\", 0);\nmsg.params = [\"T1-M1\", \"243657\"];\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 700,
+        "wires": [
+            [
+                "a1b2c3d4e5f60009"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60009",
+        "type": "postgresql",
+        "z": "a7313ce498a9d3aa",
+        "name": "inserir reset",
+        "query": "INSERT INTO sensor_eventos (id_maq, id_trigger, hora_entrada, contador, produto)\nVALUES ($1, 'reset', NOW(), 0, $2)",
+        "postgreSQLConfig": "c23297b00d818954",
+        "split": false,
+        "rowsPerMsg": "100",
+        "outputs": 1,
+        "x": 600,
+        "y": 700,
+        "wires": [
+            [
+                "a1b2c3d4e5f60010"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60010",
+        "type": "debug",
+        "z": "a7313ce498a9d3aa",
+        "name": "reset ok",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "a1b2c3d4e5f60011",
+        "type": "catch",
+        "z": "a7313ce498a9d3aa",
+        "name": "erros T1",
+        "scope": null,
+        "uncaught": false,
+        "x": 160,
+        "y": 1100,
+        "wires": [
+            [
+                "a1b2c3d4e5f60012"
+            ]
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f60012",
+        "type": "debug",
+        "z": "a7313ce498a9d3aa",
+        "name": "erro",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "error",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 1100,
+        "wires": []
+    }
+]
